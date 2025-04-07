@@ -6,6 +6,11 @@ class TaskStatus(Enum):
     IN_PROGRESS = 2
     COMPLETED = 3
 
+class TaskPriority(Enum):
+    LOW = 1
+    MEDIUM = 2
+    HIGH = 3
+
 class Task:
     def __init__(self, task_id, title, description, due_date, priority, assigned_user):
         self.id = task_id
@@ -47,8 +52,17 @@ class Task:
     def set_due_date(self, due_date):
         self.due_date = due_date
 
-    def set_priority(self, priority):
-        self.priority = priority
+    def set_priority(self, new_priority):
+        if isinstance(new_prioriy, TaskPriority):
+            self.priority = new.priority
+        else:
+            raise ValueError("Priority must either be LOW, MEDIUM, or HIGH")
 
-    def set_status(self, status):
-        self.status = status
+    def set_status(self, new_status):
+        if isinstance(new_status, TaskStatus):
+            self.status = new_status
+        else:
+            raise ValueError("Status must either be TODO, IN_PROGRESS, or COMPLETED")
+
+    def __repr__(self):
+        return f"<Task {self.id}: {self.title} | Priority: {self.priority.name} | Status: {self.status.name}>"
