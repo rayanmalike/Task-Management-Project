@@ -54,7 +54,7 @@ class Task:
 
     def set_priority(self, new_priority):
         if isinstance(new_priority, TaskPriority):
-            self.priority = new.priority
+            self.priority = new_priority
         else:
             raise ValueError("Priority must either be LOW, MEDIUM, or HIGH")
 
