@@ -53,7 +53,7 @@ class Task:
         self.due_date = due_date
 
     def set_priority(self, new_priority):
-        if isinstance(new_prioriy, TaskPriority):
+        if isinstance(new_priority, TaskPriority):
             self.priority = new.priority
         else:
             raise ValueError("Priority must either be LOW, MEDIUM, or HIGH")
