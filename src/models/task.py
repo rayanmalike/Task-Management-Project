@@ -14,7 +14,7 @@ class Task:
         self._title = title
         self._description = description
         self._due_date = due_date  # datetime object
-        self._priority = priority  # int from 1-5, for example
+        self._priority = priority  # int from 1-3
         self._status = TaskStatus.PENDING
         self._created_at = datetime.now()
         self._updated_at = datetime.now()
