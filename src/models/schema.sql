@@ -4,6 +4,7 @@ SET search_path TO project_plan;
 
 
 CREATE TYPE task_status AS ENUM ('Pending', 'In Progress', 'Completed');
+CREATE TYPE task_priority AS ENUM ('High', 'Medium', 'Low');
 
 -- Create User Table (Shared by Managers and Employees)
 CREATE TABLE Users (
