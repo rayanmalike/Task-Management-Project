@@ -1,5 +1,5 @@
 from datetime import datetime
-from task import Task
+from task import Task, TaskStatus, TaskPriority
 # from user import User
 
 class TaskManager:
@@ -45,7 +45,7 @@ class TaskManager:
     def mark_task_as_completed(self, task_id):
         task = self.tasks.get(task_id)
         if task:
-            task.set_status(TaskStatus.COMPLETED)
+            task.set_status(TaskStatus(3))
 
     def _assign_task_to_user(self, user, task):
         self.user_tasks.setdefault(user.get_id(), []).append(task)
