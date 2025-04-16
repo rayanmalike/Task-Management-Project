@@ -1,20 +1,33 @@
 
 class User:
-    def __init__(self, id, name, email, role):
-        self.id = id
-        self.name = name
+    def __init__(self, user_id, username, email, password, role):
+        self.user_id = user_id
+        self.username = username
         self.email = email
+        self.password = password  # Store hashed password for security
         self.role = role
-    # --- Getters ---
-    def get_id(self):
-        return self.id
-
-    def get_name(self):
-        return self.name
-
-    # --- Setters (optional) ---
-    def set_name(self, name):
-        self.name = name
 
     def __str__(self):
-        return f"{self.name} ({self.id})"
+        return f"User({self.user_id}, {self.username}, {self.email}, {self.role})"
+
+    # Getter and Setter methods
+    def get_user_id(self):
+        return self.user_id
+    
+    def get_username(self):
+        return self.username
+    
+    def get_email(self):
+        return self.email
+    
+    def get_password(self):
+        return self.password
+    
+    def get_role(self):
+        return self.role
+
+    def set_password(self, new_password):
+        self.password = new_password
+
+    def set_role(self, new_role):
+        self.role = new_role
