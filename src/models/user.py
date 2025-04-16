@@ -28,6 +28,3 @@ class User:
 
     def set_password(self, new_password):
         self.password = new_password
-
-    def set_role(self, new_role):
-        self.role = new_role
