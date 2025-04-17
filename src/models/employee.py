@@ -1,8 +1,8 @@
 from user import User
 
 class Employee(User):
-    def __init__(self, id, name, email, role):
-        super().__init__(id, name, email, role)
+    def __init__(self, id, name, email, password, role):
+        super().__init__(id, name, email,password, role)
         self.assigned_tasks = []
 
     def get_task(self, input):

@@ -4,8 +4,8 @@ from project import Project
 from datetime import datetime
 
 class Manager(User):
-    def __init__(self, id, name, email, role):
-        super().__init__(id, name, email, role)
+    def __init__(self, id, name, email, password,  role):
+        super().__init__(id, name, email, password, role)
         self.tasks = {}
         self.projects = {}
 

@@ -6,19 +6,24 @@ class TaskStatus(Enum):
     PENDING = 1
     IN_PROGRESS = 2
     COMPLETED = 3
+class TaskPriority(Enum):
+    HIGH = 1
+    MEDIUM = 2
+    LOW = 3
+    UNDEFINED = 4
 
 class Task:
-    def __init__(self, title, description='', due_date=None, priority=1, assigned_user=None, creator_id = None):
+    def __init__(self, title, description='', due_date=None, assigned_user=None, creator = None):
         self._id = str(uuid.uuid4())
         self._title = title
         self._description = description
         self._due_date = due_date  # datetime object
-        self._priority = priority  # int from 1-3
-        self._status = TaskStatus.PENDING
+        self._priority = TaskPriority.UNDEFINED # default Medium
+        self._status = TaskStatus.PENDING # default 
         self._created_at = datetime.now()
         self._updated_at = datetime.now()
-        self._assigned_user = None # Expected to be a User object
-        self._creator_id = creator_id
+        self._assigned_user = assigned_user # Expected to be a User object
+        self._creator = creator
 
     # --- Getters ---
     def get_id(self):
@@ -34,7 +39,7 @@ class Task:
         return self._due_date
 
     def get_priority(self):
-        return self._priority
+        return self._priority.name
 
     def get_status(self):
         return self._status
@@ -49,7 +54,7 @@ class Task:
         return self._assigned_user
     
     def get_creator_id(self):
-        return self._creator_id
+        return self._creator.get_user_id()
     
     # --- Setters ---
     def set_title(self, title):
@@ -64,7 +69,7 @@ class Task:
         self._due_date = due_date
         self._updated_at = datetime.now()
 
-    def set_priority(self, priority):
+    def set_priority(self, priority : TaskPriority):
         self._priority = priority
         self._updated_at = datetime.now()
 
@@ -77,4 +82,4 @@ class Task:
         self._updated_at = datetime.now()
 
     def __str__(self):
-        return f"[{self._status.name}] {self._title} | Due: {self._due_date} | Assigned to: {self._assigned_user.get_name() if self._assigned_user else 'Unassigned'}"
+        return f"[{self._status.name}] {self._title} | Priority: {self._priority.name} | Due: {self._due_date} | Assigned to: {self._assigned_user.get_username() if self._assigned_user else 'Unassigned'}"
