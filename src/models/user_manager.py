@@ -66,13 +66,35 @@ class UserManager:
                 return True
         return False
 
+    def reset_password(self, username: str, new_password: str) -> bool:
+        """
+        Resets the password for the given username.
+        Returns True if successful, False if the username does not exist.
+        """
+        # Check existence first
+        if not self.user_exists(username):
+            print(f"Username '{username}' not found. Password reset failed.")
+            return False
+
+        users = self.load_users()
+        # Rewrite the entire file with updated password
+        with open(self.filename, 'w', encoding='utf-8') as file:
+            for u, hashed_pass in users:
+                if u == username:
+                    new_hashed = self.hash_password(new_password)
+                    file.write(f"{u},{new_hashed}\n")
+                else:
+                    file.write(f"{u},{hashed_pass}\n")
+        print(f"Password for '{username}' has been reset successfully.")
+        return True
+
     def display_users(self):
         """
         Displays all users and their hashed passwords.
         """
         users = self.load_users()
         if users:
-            for username, hashed_password in users:
-                print(f"Username: {username}, Hashed password: {hashed_password}")
+            for index, (username, hashed_password) in enumerate(users,start = 1):
+                print(f"Username {index}: {username}, Hashed password: {hashed_password}")
         else:
             print("No user information available.")
