@@ -64,10 +64,7 @@ class UserManager:
         print(f"Password for '{username}' has been reset successfully.")
         return True
 
-    def display_users(self):
-        """
-        Displays all users and their hashed passwords.
-        """
+    def display_users(self): #Display user's account with username and hashed password. 
         users = self.load_users()
         if users:
             for index, (username, hashed_password) in enumerate(users,start = 1):
