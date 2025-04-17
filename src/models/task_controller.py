@@ -1,7 +1,5 @@
 from datetime import datetime
 from task import *
-from employee import Employee
-from manager import Manager
 import csv
 
 class TaskManager:
@@ -23,7 +21,7 @@ class TaskManager:
 
     def create_task(self, task : Task):
         self.tasks[task.get_id()] = task
-        # self._assign_task_to_user(task.get_assigned_user(), task)
+        self._assign_task_to_user(task.get_assigned_user(), task)
         print(f"Created task {task.get_id()} successfully.")
 
     def update_task(self, updated_task):
@@ -57,10 +55,10 @@ class TaskManager:
         print(f"Changed task {task.get_id()} priority to [{priority.name}]")
 
 
-    def _assign_task_to_user(self, user: Employee, task: Task):
+    def _assign_task_to_user(self, user, task: Task):
         self.user_tasks.setdefault(user.get_user_id(), []).append(task)
 
-    def _unassign_task_from_user(self, user: Employee, task: Task):
+    def _unassign_task_from_user(self, user, task: Task):
         tasks = self.user_tasks.get(user.get_user_id())
         if tasks:
             tasks.remove(task)
@@ -83,7 +81,7 @@ class TaskManager:
                     task.get_description(),
                     task.get_due_date().isoformat(),
                     task.get_priority(),
-                    task.get_status().name,
+                    task.get_status(),
                     task.get_assigned_user().get_user_id() if task.get_assigned_user() else "",
                     task.get_creator_id() 
                     # if hasattr(task, "creator_id") else ""

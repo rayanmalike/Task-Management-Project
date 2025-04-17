@@ -42,7 +42,7 @@ class Task:
         return self._priority.name
 
     def get_status(self):
-        return self._status
+        return self._status.name
 
     def get_created_at(self):
         return self._created_at

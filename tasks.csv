@@ -1,3 +1,3 @@
 ID,Title,Description,Due Date,Priority,Status,Assigned User ID,Creator ID
-04fad84f-d1c2-4fdc-baab-d59800ccb1e9,analyze data,create excel sheet,2025-04-05T00:00:00,UNDEFINED,PENDING,1,2
-b5e7a70a-af84-46c0-89be-2eb08e74c2b7,analyze sheet,create chart,2025-04-05T00:00:00,UNDEFINED,PENDING,1,2
+b5d61452-4a3e-4ef1-a574-77d928cab599,analyze data,create excel sheet,2025-04-05T00:00:00,UNDEFINED,COMPLETED,1,2
+7e931e42-15d0-43e2-9bd9-6b020f6664fe,analyze sheet,create chart,2025-04-05T00:00:00,UNDEFINED,PENDING,1,2
