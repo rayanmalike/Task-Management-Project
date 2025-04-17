@@ -20,7 +20,7 @@ def main():
             password = input("Password: ")
             if manager.verify_login(user, password):
                 print(f"\nWelcome to our Dashboard,  {user} !!!\n")
-                # Placeholder for main screen logic
+                
                 print("[Main Screen]")
                 break
             else:
