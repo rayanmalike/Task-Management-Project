@@ -85,7 +85,8 @@ class TaskManager:
                     task.get_priority(),
                     task.get_status().name,
                     task.get_assigned_user().get_user_id() if task.get_assigned_user() else "",
-                    task.creator_id if hasattr(task, "creator_id") else ""
+                    task.get_creator_id() 
+                    # if hasattr(task, "creator_id") else ""
                 ])
         file.close()
     
