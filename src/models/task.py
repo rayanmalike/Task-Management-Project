@@ -18,7 +18,7 @@ class Task:
         self._title = title
         self._description = description
         self._due_date = due_date  # datetime object
-        self._priority = TaskPriority.UNDEFINED # default Medium
+        self._priority = TaskPriority.UNDEFINED # default Undefined
         self._status = TaskStatus.PENDING # default 
         self._created_at = datetime.now()
         self._updated_at = datetime.now()
