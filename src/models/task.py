@@ -6,10 +6,9 @@ class TaskStatus(Enum):
     PENDING = 1
     IN_PROGRESS = 2
     COMPLETED = 3
-    CANCELLED = 4
 
 class Task:
-    def __init__(self, title, description='', due_date=None, priority=1, assigned_user=None):
+    def __init__(self, title, description='', due_date=None, priority=1, assigned_user=None, creator_id = None):
         self._id = str(uuid.uuid4())
         self._title = title
         self._description = description
@@ -18,7 +17,8 @@ class Task:
         self._status = TaskStatus.PENDING
         self._created_at = datetime.now()
         self._updated_at = datetime.now()
-        self._assigned_user = assigned_user  # Expected to be a User object
+        self._assigned_user = None # Expected to be a User object
+        self._creator_id = creator_id
 
     # --- Getters ---
     def get_id(self):
@@ -47,7 +47,10 @@ class Task:
 
     def get_assigned_user(self):
         return self._assigned_user
-
+    
+    def get_creator_id(self):
+        return self._creator_id
+    
     # --- Setters ---
     def set_title(self, title):
         self._title = title
