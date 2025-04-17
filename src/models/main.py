@@ -1,5 +1,13 @@
-from user_manager import UserManager
+from user_manager_dict import UserManager
+
 def main():
+    def clear_screen():
+        print("\n" * 10)  # os.system('cls' if os.name == 'nt' else 'clear')
+
+    def RunSystem():
+        print("---[Main Screen]---")
+
+
     manager = UserManager('users.csv')
     while True:
         print("\n=== User Management ===")
@@ -19,9 +27,9 @@ def main():
             user = input("Username: ")
             password = input("Password: ")
             if manager.verify_login(user, password):
+                clear_screen()
                 print(f"\nWelcome to our Dashboard,  {user} !!!\n")
-                
-                print("[Main Screen]")
+                RunSystem() # -> Run system after successfully logging in. 
                 break
             else:
                 print("Invalid credentials.")
