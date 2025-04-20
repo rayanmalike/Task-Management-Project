@@ -3,13 +3,13 @@ def show_boss_menu(username, manager): # -> "username" parameter used to identif
         print("""
 ====== BOSS DASHBOARD ======
 1. Display all users
-2. Add new Manager -> #Done 
-3. Reset Password for users -> #Done
-4. Delete User -> #Done
-5. Promote/Demote Role -> #Done
-6. Display all Projects/Task -> Missing (need to fill in) #Missing
-7. Assign specific Project/Task -> Missing (need to fill in) #Missing
-8. Logout -> #Done
+2. Add new Account
+3. Reset Password for users
+4. Delete User
+5. Promote/Demote Role
+6. Display all Projects/Task -> Missing (need to fill in)
+7. Assign specific Project/Task -> Missing (need to fill in)
+8. Logout
 """)
 
         choice = input("Select an option: ")
