@@ -1,0 +1,10 @@
+def show_manager_menu(username):
+    print(f"[Manager Menu for {username}]") # -> "username" parameter used to identify whether it's a boss, manager, or employee based on their "role".
+    print("""
+====== MANAGER DASHBOARD ======
+1. ### -> NEED TO BE FILLLED. 
+2. ### -> NEED TO BE FILLED.
+3. ### -> NEED TO BE FILLED. 
+4. Logout 
+""")
+    ### -> Need to be filled in menu options for Employee.
