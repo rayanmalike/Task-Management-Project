@@ -1,49 +1,53 @@
 from user_manager_dict import UserManager
+from boss_menu import show_boss_menu
+from manager_menu import show_manager_menu
+from employee_menu import show_employee_menu
+
+
+def clear_screen():
+    print("\n" * 10)  # Simulate clearing screen
 
 def main():
-    def clear_screen():
-        print("\n" * 10)  # os.system('cls' if os.name == 'nt' else 'clear')
-
-    def RunSystem():
-        print("---[Main Screen]---")
-
-
     manager = UserManager('users.csv')
-    while True:
+
+    if not manager.users_dict:
+    # Boss is allowed to create account first when program is first used (meaning he owned it).
+    # After Boss created his own account, then he can register and create new account for the Manager and Employee.
+        print("No users found. Please create the first Boss account.")
+        username = input("Enter boss username: ")
+        password = input("Enter boss password: ")
+        email = input("Enter boss email: ")
+        user_id = input("Enter boss ID: ")
+        manager.register_user(username, password, role="boss", email=email, user_id=user_id)
+
+    while True: #Main for Login after Boss created his account.
         print("\n=== User Management ===")
-        print("1. Register")
-        print("2. Login")
-        print("3. Reset Password")
-        print("4. Display All Users")
-        print("5. Exit")
+        print("1. Login")
+        print("2. Exit")
         choice = input("Select an option: ")
 
-        if choice == '1': #Register
-            user = input("Enter new username: ")
-            password = input("Enter new password: ")
-            manager.register_user(user, password)
-
-        elif choice == '2': #Login
-            user = input("Username: ")
+        if choice == '1': #Log in
+            username = input("Username: ")
             password = input("Password: ")
-            if manager.verify_login(user, password):
+            if manager.verify_login(username, password):
                 clear_screen()
-                print(f"\nWelcome to our Dashboard,  {user} !!!\n")
-                RunSystem() # -> Run system after successfully logging in. 
+                print(f"\nWelcome to our Dashboard,  {username} !!!\n")
+                role = manager.get_user_role(username)
+
+                if role == "boss":
+                    show_boss_menu(username, manager)  # Show menu for BOSS if account logging in identied as "BOSS".
+
+                elif role == "manager":
+                    show_manager_menu(username)  # Show Manager's menu if account logging in identied as "Manager".
+
+                elif role == "employee":
+                    show_employee_menu(username)  ##Show Employee's menu if account logging in identied as "Manager".
                 break
             else:
                 print("Invalid credentials.")
 
-        elif choice == '3': #Reset Password
-            user = input("Username to reset: ")
-            new_pwd = input("Enter new password: ")
-            manager.reset_password(user, new_pwd)
-
-        elif choice == '4': #Display All Users
-            manager.display_users()
-
-        elif choice == '5': #Exit our Program
-            print("Exiting application.")
+        elif choice == '2': #Exit Program.
+            print("Exiting application, see you again!")
             break
 
         else:
