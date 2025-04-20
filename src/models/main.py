@@ -5,7 +5,7 @@ from employee_menu import show_employee_menu
 
 
 def clear_screen():
-    print("\n" * 10)  # Simulate clearing screen
+    print("\n" * 10)  
 
 def main():
     manager = UserManager('users.csv')
