@@ -56,6 +56,10 @@ class Task:
     def get_creator_id(self):
         return self._creator.get_user_id()
     
+    def get_task(self, task_id):
+        return self.tasks.get(task_id)
+
+    
     # --- Setters ---
     def set_title(self, title):
         self._title = title

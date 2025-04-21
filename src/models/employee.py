@@ -61,11 +61,11 @@ class Employee(User):
     def get_task_priority(self, task: Task):
         return task.get_priority()
 
-    # def get_project_description(self, project):
-    #     return project.get_description()
+    def get_project_description(self, project):
+        return project.get_description()
 
-    # def get_project_end_date(self, project):
-    #     return project.get_end_date()
+    def get_project_due_date(self, project):
+        return project.get_due_date()
 
 
 file.close()
