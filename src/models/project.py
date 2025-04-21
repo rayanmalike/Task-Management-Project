@@ -1,41 +1,45 @@
+from datetime import datetime
+import uuid
+
 class Project:
-    def __init__(self, project_id, title, description, start_date, end_date, assigned_tasks : list):
-        self.id = project_id
-        self.title = title
-        self.description = description
-        self.start_date = start_date
-        self.end_date = end_date
-        self.assigned_tasks = assigned_tasks
+    def __init__(self, title, description = '', due_date = None, assigned_tasks = None, creator = None):
+        self._id = str(uuid.uuid4())
+        self._title = title
+        self._description = description
+        self._due_date = due_date
+        self._created_at = datetime.now()
+        self._updated_at = datetime.now()
+        self._assigned_tasks = assigned_tasks # list of Task objects
+        self._creator = creator # Manager object
 
     # Getters and setters
     def get_id(self):
-        return self.id
+        return self._id
 
     def get_title(self):
-        return self.title
+        return self._title
 
     def get_description(self):
-        return self.description
+        return self._description
 
-    def get_start_date(self):
-        return self.start_date
-      
-    def get_end_date(self):
-        return self.end_date
+    def get_created_at(self):
+        return self._created_at
+
+    def get_updated_at(self):
+        return self._updated_at
 
     def get_assigned_tasks(self):
-        return self.assigned_tasks
+        return self._assigned_tasks
 
     def set_title(self, title):
-        self.title = title
+        self._title = title
 
     def set_description(self, description):
-        self.description = description
+        self._description = description
 
-    def set_start_date(self, start_date):
-        self.start_date = start_date
+    def set_due_date(self, due_date):
+        self._due_date = due_date
+        self._updated_at = datetime.now()
 
-    def set_end_date(self, end_date):
-        if end_date >= self.start_date:
-            raise ValueError("End date must be after Start date")
-        self.end_date = end_date
+    def __str__(self):
+        [print(task) for task in self._assigned_tasks]
