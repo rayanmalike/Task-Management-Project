@@ -61,14 +61,14 @@ class UserManager:
         hashed_input = self.hash_password(password)
         return user["password"] == hashed_input
 
-    def delete_user(self, username: str) -> bool:
-        if username in self.users_dict:
-            del self.users_dict[username]
+    def delete_user(self, user_id: int) -> bool:
+        if user_id in self.users_dict:
+            del self.users_dict[user_id]
             self._write_all_users_to_file()
-            print(f"-> User '{username}' has been deleted successfully !!!")
+            print(f"-> User with ID '{user_id}' has been deleted successfully!")
             return True
         else:
-            print(f"User '{username}' not found. Unable to delete!")
+            print(f"User with ID '{user_id}' not found. Unable to delete!")
             return False
 
     def get_user_role(self, username: str) -> str:
@@ -94,8 +94,6 @@ class UserManager:
         else:
             print("No user information available.")
 
-
-
     def update_role(self, username: str, new_role: str) -> bool:
         if username not in self.users_dict:
             print(f"User '{username}' not found.")
@@ -108,5 +106,26 @@ class UserManager:
         self.users_dict[username]['role'] = new_role
         self._write_all_users_to_file()
         print(f"User '{username}' role updated to '{new_role}'.")
+        return True
+    
+    def update_user_info(self, username: str, new_email: str = None, new_username: str = None) -> bool:
+        if username not in self.users_dict:
+            print(f"User '{username}' not found.")
+            return False
+            
+        user_data = self.users_dict[username]
+        
+        if new_email:
+            user_data['email'] = new_email
+        
+        if new_username and new_username != username:
+            if new_username in self.users_dict:
+                print(f"Username '{new_username}' already exists.")
+                return False
+            self.users_dict[new_username] = user_data
+            del self.users_dict[username]
+        
+        self._write_all_users_to_file()
+        print(f"User information updated successfully.")
         return True
 

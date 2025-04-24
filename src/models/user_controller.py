@@ -20,17 +20,78 @@ class UserController:
         return UserController._instance
     
     def create_employee(self, id: int, name: str, email: str, password: str) -> Employee:
-        employee = Employee(id, name, email, password, "employee")
-        self.employees[id] = employee
-        self._save_employees_to_csv()
-        return employee
+        try:
+            employee = Employee(id, name, email, password, "employee")
+            self.employees[id] = employee
+            self._save_employees_to_csv()
+            print(f"Created employee {name} successfully.")
+            return employee
+        except Exception as e:
+            print(f"Failed to create new employee: {str(e)}")
+            return None
     
     def create_manager(self, id: int, name: str, email: str, password: str) -> Manager:
-        manager = Manager(id, name, email, password, "manager")
-        self.managers[id] = manager
-        self._save_managers_to_csv()
-        return manager
-    
+        try:
+            manager = Manager(id, name, email, password, "manager")
+            self.managers[id] = manager
+            self._save_managers_to_csv()
+            print(f"Created manager {name} successfully.")
+            return manager
+        except Exception as e :
+            print(f"Failed to create new manager: {str(e)}")
+            return None
+        
+    def update_password(self, user_id: int, new_password: str, is_manager: bool = False) -> bool:
+        try:
+            if is_manager:
+                if user_id in self.managers:
+                    self.managers[user_id].set_password(new_password)
+                    self._save_managers_to_csv()
+                    print(f"Successfully updated manager password (ID: {user_id})")
+                    return True
+            else:
+                if user_id in self.employees:
+                    self.employees[user_id].set_password(new_password)
+                    self._save_employees_to_csv()
+                    print(f"Successfully updated employee password (ID: {user_id})")
+                    return True
+            return False
+        except Exception as e:
+            print(f"Failed to update password: {str(e)}")
+            return False
+        
+    def update_employee_info(self, employee_id: int, new_name: str = None, new_email: str = None) -> bool:
+        try:
+            if employee_id in self.employees:
+                employee = self.employees[employee_id]
+                if new_name:
+                    employee.set_name(new_name)
+                if new_email:
+                    employee.set_email(new_email)
+                self._save_employees_to_csv()
+                print(f"Successfully updated employee info (ID: {employee_id})")
+                return True
+            return False
+        except Exception as e:
+            print(f"Failed to update employee info: {str(e)}")
+            return False
+
+    def update_manager_info(self, manager_id: int, new_name: str = None, new_email: str = None) -> bool:
+        try:
+            if manager_id in self.managers:
+                manager = self.managers[manager_id]
+                if new_name:
+                    manager.set_name(new_name)
+                if new_email:
+                    manager.set_email(new_email)
+                self._save_managers_to_csv()
+                print(f"Successfully updated manager info (ID: {manager_id})")
+                return True
+            return False
+        except Exception as e:
+            print(f"Failed to update manager info: {str(e)}")
+            return False
+        
     def get_employee(self, employee_id: int) -> Optional[Employee]:
         return self.employees.get(employee_id)
     
