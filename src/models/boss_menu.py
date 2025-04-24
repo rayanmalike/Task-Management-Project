@@ -20,7 +20,7 @@ def show_boss_menu(username, manager): # -> "username" parameter used to identif
         elif choice == '2':
             username = input("Enter new user's Username: ")
             password = input("Enter new user's Password: ")
-            email = input("Enter new user's Email")
+            email = input("Enter new user's Email: ")
             
             while True:
                 role = input("Enter new user's Role (manager/employee): ").lower()

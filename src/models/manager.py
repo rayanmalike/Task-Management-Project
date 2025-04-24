@@ -1,7 +1,6 @@
 from user import User
-from task import Task, TaskStatus
+from task import Task
 from project import Project
-from datetime import datetime
 
 class Manager(User):
     def __init__(self, id, name, email, password,  role):

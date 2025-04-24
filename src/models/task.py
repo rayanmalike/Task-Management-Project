@@ -14,7 +14,7 @@ class TaskPriority(Enum):
 
 class Task:
     def __init__(self, title, description='', due_date=None, assigned_user=None, creator = None):
-        self._id = str(uuid.uuid4())
+        self._id = None
         self._title = title
         self._description = description
         self._due_date = due_date  # datetime object
@@ -24,6 +24,7 @@ class Task:
         self._updated_at = datetime.now()
         self._assigned_user = assigned_user # Expected to be a User object
         self._creator = creator
+        self._comments = []
 
     # --- Getters ---
     def get_id(self):
@@ -59,8 +60,13 @@ class Task:
     def get_task(self, task_id):
         return self.tasks.get(task_id)
 
+    def get_comments(self):
+        return self._comments
     
     # --- Setters ---
+    def set_id (self, task_id: int):
+        self._id = task_id
+        
     def set_title(self, title):
         self._title = title
         self._updated_at = datetime.now()
@@ -85,5 +91,28 @@ class Task:
         self._assigned_user = user
         self._updated_at = datetime.now()
 
+    def add_comment(self, user, comment_text):
+        comment = {
+            'user': user,
+            'text': comment_text,
+            'timestamp': datetime.now()
+        }
+        self._comments.append(comment)
+        self._updated_at = datetime.now()
+
+    def display_comments(self):
+        if not self._comments:
+            return "No comments yet."
+        
+        comment_display = []
+        for comment in self._comments:
+            comment_display.append(
+                f"[{comment['timestamp'].strftime('%Y-%m-%d %H:%M')}] "
+                f"{comment['user'].get_username()}: {comment['text']}"
+            )
+        return "\n".join(comment_display)
+    
     def __str__(self):
-        return f"[{self._status.name}] {self._title} | Priority: {self._priority.name} | Due: {self._due_date} | Assigned to: {self._assigned_user.get_username() if self._assigned_user else 'Unassigned'}"
+        base_str = f"[{self._status.name}] {self._title} | Priority: {self._priority.name} | Due: {self._due_date} | Assigned to: {self._assigned_user.get_username() if self._assigned_user else 'Unassigned'}"
+        comments = self.display_comments()
+        return f"{base_str}\nComments:\n{comments}"

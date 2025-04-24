@@ -49,6 +49,18 @@ class Employee(User):
             print(f"Priority: {task.get_priority()}")
             print("-" * 50)
 
+
+    def display_task_comments(self, task: Task):
+        """Display all comments for a specific task"""
+        print(f"\nComments for task '{task.get_title()}':")
+        comments = task.display_comments()
+        print(comments)
+        
+    def add_task_comment(self, task: Task, comment_text: str):
+        """Add a comment to a specific task"""
+        task.add_comment(self, comment_text)
+        print(f"Comment added successfully to task '{task.get_title()}'")
+
     def submit_task(self, task: Task):
         return TaskManager.mark_task_as_completed(TaskManager, task)
 
@@ -86,11 +98,15 @@ file.close()
 # user1._load_tasks_from_csv()
 # user1.get_assigned_tasks()
 # user1.display_tasks()
+# user1.display_task_comments(task1)
+# user1.add_task_comment(task1, "Started working on the data analysis")
+# user1.display_task_comments(task1)
+# # user2.add_task_comment()
 
 # # print(emp.get_task_priority(emp.assigned_tasks[0]))
 # # print(emp.get_task_description(emp.assigned_tasks[1]))
-# user1.submit_task(user1.assigned_tasks[0])
-# user1.display_tasks()
+# # user1.submit_task(user1.assigned_tasks[0])
+# # user1.display_tasks()
 # tm._save_tasks_to_csv()
 
 

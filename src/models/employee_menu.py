@@ -4,10 +4,13 @@ def show_employee_menu(username):
 ====== Employee DASHBOARD ======
 Welcome, {username}!
 
-1. [Coming soon...]
-2. [Coming soon...]
-3. [Coming soon...]
-4. Logout
+1. View Tasks
+2. View Project
+3. Track Task Status 
+4. Submit Task Completion
+5. Add Task Comment
+6. View Task Comments
+7. Logout
 """)
         choice = input("Select an option: ")
 
@@ -20,9 +23,9 @@ Welcome, {username}!
         elif choice == '3':
             pass
 
-        elif choice == '4':
-            print("Logging out...")
-            break
+        # elif choice == '4':
+        #     print("Logging out...")
+        #     break
 
-        else:
-            print("Invalid option. Please try again.")
+        # else:
+        #     print("Invalid option. Please try again.")

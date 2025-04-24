@@ -1,7 +1,6 @@
 from datetime import datetime
 from task import *
 import csv
-# from user import User
 
 class TaskManager:
     _instance = None
@@ -30,6 +29,7 @@ class TaskManager:
         self.tasks[task.get_id()] = task
         self._assign_task_to_user(task.get_assigned_user(), task)
         print(f"Created task {task.get_id()} successfully.")
+        
 
     def update_task(self, existing_task: Task):
         self.check_manager(existing_task)
@@ -68,6 +68,19 @@ class TaskManager:
             task.set_priority(priority)
         print(f"Changed task {task.get_id()} priority to [{priority.name}]")
 
+    def add_comment_to_task(self, task: Task, user, comment_text: str):
+        if task and (self._is_manager(user) or user == task.get_assigned_user()):
+            task.add_comment(user, comment_text)
+            print(f"Comment added to task {task.get_id()} successfully.")
+        else:
+            print("Only managers or assigned users can add comments to tasks.")
+
+    def view_task_comments(self, task: Task):
+        if task:
+            print(f"Comments for task {task.get_id()} - {task.get_title()}:")
+            print(task.display_comments())
+        else:
+            print("Task not found.")
 
     def _assign_task_to_user(self, user, task: Task):
         if user not in self.user_tasks:
