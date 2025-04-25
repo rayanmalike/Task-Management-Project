@@ -1,6 +1,5 @@
 from datetime import datetime
 from enum import Enum
-import uuid
 
 class TaskStatus(Enum):
     PENDING = 1
@@ -22,7 +21,7 @@ class Task:
         self._status = TaskStatus.PENDING # default 
         self._created_at = datetime.now()
         self._updated_at = datetime.now()
-        self._assigned_user = assigned_user # Expected to be a User object
+        self._assigned_user = assigned_user 
         self._creator = creator
         self._comments = []
 
@@ -55,7 +54,7 @@ class Task:
         return self._assigned_user
     
     def get_creator_id(self):
-        return self._creator.get_user_id()
+        return self._creator
     
     def get_task(self, task_id):
         return self.tasks.get(task_id)
@@ -79,16 +78,24 @@ class Task:
         self._due_date = due_date
         self._updated_at = datetime.now()
 
-    def set_priority(self, priority : TaskPriority):
-        self._priority = priority
+    def set_priority(self, priority):
+        if priority == 'LOW' : self._priority= TaskPriority.LOW
+        elif priority == 'MEDIUM': self._priority= TaskPriority.MEDIUM
+        elif priority == 'HIGH' : self._priority=TaskPriority.HIGH
         self._updated_at = datetime.now()
 
-    def set_status(self, status: TaskStatus):
-        self._status = status
+    def set_status(self, status):
+        if status == 'COMPLETED' : self._status= TaskStatus.COMPLETED
+        elif status == 'PENDING': self._status=TaskStatus.PENDING
+        elif status == 'IN PROGRESS' : self._status=TaskStatus.IN_PROGRESS
         self._updated_at = datetime.now()
 
-    def set_assigned_user(self, user):
-        self._assigned_user = user
+    def set_assigned_user(self, user_id):
+        self._assigned_user =  user_id
+        self._updated_at = datetime.now()
+
+    def set_creator(self, creator_id):
+        self._creator = creator_id
         self._updated_at = datetime.now()
 
     def add_comment(self, user, comment_text):

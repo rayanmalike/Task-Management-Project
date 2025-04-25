@@ -2,6 +2,7 @@ from manager import Manager
 from employee import Employee
 import csv
 from typing import List, Optional
+from user_manager_dict import UserManager
 
 class UserController:
     _instance = None
@@ -12,6 +13,7 @@ class UserController:
         UserController._instance = self
         self.employees = {}
         self.managers = {}
+        self._load_from_csv()
         
     @staticmethod
     def get_instance():
@@ -97,6 +99,20 @@ class UserController:
     
     def get_manager(self, manager_id: int) -> Optional[Manager]:
         return self.managers.get(manager_id)
+    
+    def get_manager_by_username(self, username):
+        # Search through users dictionary
+        for user_id, user in self.managers.items():
+            if user.get_username() == username and user.get_role().lower() == "manager":
+                return user
+        return None
+    
+    def get_employee_by_username(self, username):
+        # Search through users dictionary
+        for user_id, user in self.employees.items():
+            if user.get_username() == username and user.get_role().lower() == "employee":
+                return user
+        return None
     
     def get_all_employees(self) -> List[Employee]:
         return list(self.employees.values())

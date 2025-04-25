@@ -3,7 +3,7 @@ import uuid
 
 class Project:
     def __init__(self, title, description = '', due_date = None, creator = None):
-        self._id = str(uuid.uuid4())
+        self._id = None
         self._title = title
         self._description = description
         self._due_date = due_date
@@ -40,6 +40,9 @@ class Project:
     
     def get_creator(self):
         return self._creator.get_user_id()
+    
+    def set_id(self, id):
+        self._id = id
 
     def set_title(self, title):
         self._title = title

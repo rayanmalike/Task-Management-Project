@@ -2,7 +2,7 @@ from user_manager_dict import UserManager
 from boss_menu import show_boss_menu
 from manager_menu import show_manager_menu
 from employee_menu import show_employee_menu
-
+from user_controller import UserController
 
 def clear_screen():
     print("\n" * 10)  
@@ -38,10 +38,15 @@ def main():
                     show_boss_menu(username, manager)  # Show menu for BOSS if account logging in identied as "BOSS".
 
                 elif role == "manager":
-                    show_manager_menu(username)  # Show Manager's menu if account logging in identied as "Manager".
-
+                    user_controller = UserController.get_instance()
+                    current_user = user_controller.get_manager_by_username(username)
+                    if not current_user or current_user.get_role().lower() != "manager":
+                        print("Error: Invalid user or insufficient permissions")
+                        return
+                    show_manager_menu(current_user)  # Show Manager's menu if account logging in identied as "Manager".
                 elif role == "employee":
                     show_employee_menu(username)  ##Show Employee's menu if account logging in identied as "Manager".
+                        
                 break
             else:
                 print("Invalid credentials.")
