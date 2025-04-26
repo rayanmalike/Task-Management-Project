@@ -115,11 +115,11 @@ class Task:
         for comment in self._comments:
             comment_display.append(
                 f"[{comment['timestamp'].strftime('%Y-%m-%d %H:%M')}] "
-                f"{comment['user'].get_username()}: {comment['text']}"
+                f"{comment['user']}: {comment['text']}"
             )
         return "\n".join(comment_display)
     
     def __str__(self):
-        base_str = f"[{self._status.name}] {self._title} | Priority: {self._priority.name} | Due: {self._due_date} | Assigned to: {self._assigned_user.get_username() if self._assigned_user else 'Unassigned'}"
+        base_str = f"[{self._status.name}] {self._title} | Priority: {self._priority.name} | Due: {self._due_date} | Assigned to user ID: {self._assigned_user if self._assigned_user else 'Unassigned'}"
         comments = self.display_comments()
         return f"{base_str}\nComments:\n{comments}"

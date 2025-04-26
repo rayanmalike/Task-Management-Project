@@ -1,7 +1,7 @@
 from datetime import datetime
 from task import Task
 from manager import Manager
-def show_manager_menu(manager: Manager):
+def show_manager_menu_task(manager: Manager):
     from user_controller import UserController
     from task_controller import TaskManager
     
@@ -29,19 +29,13 @@ Welcome, {manager.get_username()}!
         if choice == '1':
             try:
                 id = input("Enter task ID: ")
-                title = input("Enter task title: ")
-                description = input("Enter task description: ")
-                print("Enter due date:")
-                year = int(input("Year: "))
-                month = int(input("Month: "))
-                day = int(input("Day: "))
-                due_date = datetime(year, month, day)
-                priority = input("Enter priority (LOW/MEDIUM/HIGH): ").upper()
-                assigned_user_id = int(input("Enter assigned user ID: "))
-                
-                task = Task(title, description, due_date, assigned_user_id, manager.get_user_id())
+                task = Task(input("Enter task title: "),
+                            input("Enter task description: "), 
+                            datetime(int(input("Enter due date: \nYear: ")), int(input("Month: ")), int(input("Day: "))), 
+                            int(input("Enter assigned user ID: ")), 
+                            manager.get_user_id())
                 task.set_id(id)
-                task.set_priority(priority)
+                task.set_priority(input("Enter priority (LOW/MEDIUM/HIGH): ").upper())
                 task_manager.create_task(task)
                 task_manager._save_tasks_to_csv()
                 print("Task created successfully!")
@@ -76,27 +70,49 @@ Welcome, {manager.get_username()}!
 
         elif choice == '4':
             task_id = input("Enter task ID to update priority: ")
-            priority =input("Enter updated priority [LOW/MEDIUM/HIGH]: ").upper()
+            priority = input("Enter updated priority [LOW/MEDIUM/HIGH]: ").upper()
             try:
                 task_manager.change_task_priority(task_id, priority)
             except Exception as e:
                 print(str(e))
 
         elif choice == '5':
-            pass
+            task_id = input("Enter task ID to track status: ")
+            try:
+                task = task_manager.get_task_by_id(task_id)
+                print(f"Current status for task [{task_id}]: {task.get_status()}")
+            except Exception as e:
+                print(str(e))
 
         elif choice == '6':
-            pass
+            task_id = input("Enter task ID to change assigned user: ")
+            try:
+                task = task_manager.get_task_by_id(task_id)
+                task.set_assigned_user(input("Enter new assigned user ID: "))
+                task_manager._save_tasks_to_csv()
+                print(f"Changed task {task_id} assigned user ID successfully.")
+            except Exception as e:
+                print(str(e))
+
 
         elif choice == '7':
-            pass
+            task_id = input("Enter task ID to add comment: ")
+            try:
+                task = task_manager.get_task_by_id(task_id)
+                task_manager.view_task_comments(task)
+                task_manager.add_comment_to_task(task, manager, input("Enter comment for task: "))
+            except Exception as e:
+                print(str(e))
 
         elif choice == '8':
-            pass
+            task_manager.list_tasks()
 
         elif choice == '9':
             print("Returning to main menu...")
-            return
+            return False
 
         else:
             print("Invalid option. Please try again.")
+
+def show_manager_menu_project(manager: Manager): #TODO: implement project menu
+    pass

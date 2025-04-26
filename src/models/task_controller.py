@@ -1,7 +1,6 @@
 from datetime import datetime
 from task import Task
 import csv
-
 class TaskManager:
     _instance = None
 
@@ -13,6 +12,7 @@ class TaskManager:
             self.tasks = {}
             self.user_tasks = {}
             self.load_tasks_from_csv()
+            self._load_comments_from_csv()
 
     @staticmethod
     def get_instance():
@@ -67,8 +67,9 @@ class TaskManager:
             print(f"Task must be existed")
 
     def add_comment_to_task(self, task: Task, user, comment_text: str):
-        if task and (self._is_manager(user) or user == task.get_assigned_user()):
+        if task and (user.get_role() == 'manager' or user == task.get_assigned_user()):
             task.add_comment(user, comment_text)
+            self._save_tasks_to_csv()
             print(f"Comment added to task {task.get_id()} successfully.")
         else:
             print("Only managers or assigned users can add comments to tasks.")
@@ -101,54 +102,82 @@ class TaskManager:
         with open("tasks.csv", "w", newline="") as file:
             writer = csv.writer(file)
             writer.writerow([
-                "ID", "Title", "Description", "Due Date",
-                "Priority", "Status", "Assigned User ID", "Creator ID"
+                "Task_ID", "Title", "Description", "Due_Date",
+                "Priority", "Status", "Assigned_User_ID", "Creator_ID",
+                "Comment_Text", "Comment_Username", "Comment_Timestamp"
             ])
             for task in self.tasks.values():
-                writer.writerow([
-                    task.get_id(),
-                    task.get_title(),
-                    task.get_description(),
-                    task.get_due_date().isoformat(),
-                    task.get_priority(),
-                    task.get_status(),
-                    task.get_assigned_user(),
-                    task.get_creator_id() 
+                # If task has no comments, save just the task info
+                if not task.get_comments():
+                    writer.writerow([
+                        task.get_id(), task.get_title(), task.get_description(),
+                        task.get_due_date().isoformat(), task.get_priority(),
+                        task.get_status(), task.get_assigned_user(),
+                        task.get_creator_id(), "", "", ""
+                    ])
+                # If task has comments, save one row per comment
+                for comment in task.get_comments():
+                    writer.writerow([
+                        task.get_id(), task.get_title(), task.get_description(),
+                        task.get_due_date().isoformat(), task.get_priority(),
+                        task.get_status(), task.get_assigned_user(),
+                        task.get_creator_id(), comment['text'],
+                        comment['user'].get_username(), comment['timestamp'].isoformat()
                 ])
         file.close()
 
     def get_task_by_id(self, task_id):
-        return self.tasks.get(task_id)
+        try:
+            if task_id in self.tasks:
+                return self.tasks.get(task_id)
+        except:
+            print("Task not found")
 
     def load_tasks_from_csv(self):
         try:
             with open("tasks.csv", "r", newline="") as file:
-                reader = csv.reader(file)
-                next(reader)  # Skip header row
+                reader = csv.DictReader(file)  # Use DictReader instead of reader
                 for row in reader:
-                    task_id, title, description, due_date, priority, status, assigned_user_id, creator_id = row
-                    
+                    # Skip rows that are just comments
+                    if not row['Task_ID'] or row['Task_ID'] in self.tasks:
+                        continue
+                        
                     # Convert string date back to datetime
-                    due_date = datetime.fromisoformat(due_date)
+                    due_date = datetime.fromisoformat(row['Due_Date'])
                     
                     # Create new task object
-                    task = Task(title, description, due_date)
+                    task = Task(row['Title'], row['Description'], due_date)
                     
                     # Set additional properties
-                    task._id = task_id
-                    task.set_priority(priority)
-                    task.set_status(status)
-                    task.set_assigned_user(assigned_user_id)
-                    task.set_creator(creator_id)
+                    task._id = row['Task_ID']
+                    task.set_priority(row['Priority'])
+                    task.set_status(row['Status'])
+                    task.set_assigned_user(row['Assigned_User_ID'])
+                    task.set_creator(row['Creator_ID'])
                     
                     # Store in tasks dictionary
-                    self.tasks[task_id] = task
+                    self.tasks[row['Task_ID']] = task
                     
             print("Tasks loaded successfully from CSV.")
         except FileNotFoundError:
             print("No tasks.csv file found.")
         except Exception as e:
             print(f"Error loading tasks: {str(e)}")
+
+
+    def _load_comments_from_csv(self):
+        with open("tasks.csv", "r", newline="") as file:
+            reader = csv.DictReader(file)
+            for row in reader:
+                if row['Comment_Text'] and row['Comment_Username']:
+                    task = self.tasks.get(row['Task_ID'])
+                    if task:
+                        comment = {
+                            'user': row['Comment_Username'],
+                            'text': row['Comment_Text'],
+                            'timestamp': datetime.fromisoformat(row['Comment_Timestamp'])
+                        }
+                        task._comments.append(comment)
 
     
 
