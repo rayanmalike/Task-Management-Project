@@ -2,11 +2,7 @@ from datetime import datetime
 from task import Task
 from manager import Manager
 def show_manager_menu_task(manager: Manager):
-    from user_controller import UserController
     from task_controller import TaskManager
-    
-    # Get user instance
-    user_controller = UserController.get_instance()
     task_manager = TaskManager.get_instance()
 
     while True:
