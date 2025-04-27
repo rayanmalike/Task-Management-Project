@@ -2,7 +2,6 @@ from project import Project
 from task import Task
 import csv
 from datetime import datetime
-# from user import User # to be deleted
 
 class ProjectManager:
     _instance = None
@@ -13,56 +12,50 @@ class ProjectManager:
         else:
             ProjectManager._instance = self
             self.projects = {}
+            self._load_projects_from_csv()
     
     @staticmethod
     def get_instance():
         if ProjectManager._instance is None:
             ProjectManager()
         return ProjectManager._instance
-    
-    def check_manager(self, project: Project):
-        if (project._creator.get_role() != "Manager".lower()):
-            raise Exception ("Only Manager can create/update/delete project.")
 
     def create_project(self, project : Project):
         self.projects[project.get_id()] = project
+        self._save_project_to_file()
         print(f"Created project {project.get_id()} successfully.")
     
     def add_task_to_project(self, project: Project, task: Task) -> bool:
         if project and task:
             if project.get_id() in self.projects:
-                project.get_assigned_tasks().append(task)  # Assuming project.tasks is the list attribute
+                project.get_assigned_tasks()[task.get_id()] = task 
                 print(f"Added task {task.get_id()} to project {project.get_id()} successfully.")
+                self._save_project_to_file()
                 return True
         return False
 
     def delete_task_from_project(self, project: Project, task: Task) -> bool:
         if project and task:
             if project.get_id() in self.projects:
-                if task in project.get_assigned_tasks():  # Assuming project.tasks is the list attribute
-                    project.get_assigned_tasks().remove(task)
+                if task.get_id() in project.get_assigned_tasks():
+                    del project.get_assigned_tasks()[task.get_id()]
                     print(f"Removed task {task.get_id()} from project {project.get_id()} successfully.")
+                    self._save_project_to_file()
                     return True
-        print("Failed to remove task from project.")
-        return False
+            print("Failed to remove task from project.")
+            return False
 
     def update_project(self, project: Project):
-        self.check_manager(project)
-        if project.get_id() in self.projects:
-            project.set_title(input("Enter new project name: "))
+            project.set_title(input("Enter new project title: "))
             project.set_description(input("Enter new description: "))
             project.set_due_date(datetime(int(input("Enter year: ")), int(input("Enter month: ")), int(input("Enter date: "))))
+            self._save_project_to_file()
             print(f"Updated project {project.get_id()} successfully.")
-        else:
-            print("Project not found")
 
     def delete_project(self, project: Project):
-        self.check_manager(project)
-        if project.get_id() in self.projects:
             del self.projects[project.get_id()]
+            self._save_project_to_file()
             print(f"Deleted project {project.get_id()} successfully")
-        else:
-            print("Project not found")
 
     def _save_project_to_file(self):
         try:
@@ -73,9 +66,9 @@ class ProjectManager:
                     "Creator_ID", "Task_ID", "Task_Title", "Task_Description", "Task_Due_Date", "Task_Status"
                 ])
                 for project in self.projects.values():
-                    tasks = project.get_tasks()
+                    tasks = project.get_assigned_tasks()
                     if tasks:  # If project has tasks
-                        for task in tasks:
+                        for task_id, task in tasks.items():
                             writer.writerow([
                                 project.get_id(),
                                 project.get_title(),
@@ -101,6 +94,64 @@ class ProjectManager:
         except Exception as e:
             print(f"Error saving projects to file: {str(e)}")
 
+    def _load_projects_from_csv(self):
+        try:
+            with open("projects.csv", "r", newline="") as file:
+                reader = csv.DictReader(file)
+                for row in reader:
+                    # Skip if project ID is empty or project already exists
+                    if not row['Project_ID'] or row['Project_ID'] in self.projects:
+                        continue
+                    
+                    # Convert string date to datetime
+                    due_date = datetime.fromisoformat(row['Project_Due_Date'])
+                    
+                    # Create new project
+                    project = Project(
+                        row['Project_Title'],
+                        row['Project_Description'],
+                        due_date,
+                        row['Creator_ID']
+                    )
+                    project.set_id(row['Project_ID'])
+                    
+                    # Add task if task fields are not empty
+                    if row['Task_ID']:
+                        task_due_date = datetime.fromisoformat(row['Task_Due_Date'])
+                        task = Task(
+                            row['Task_Title'],
+                            row['Task_Description'],
+                            task_due_date
+                        )
+                        task.set_id(row['Task_ID'])
+                        task.set_status(row['Task_Status'])
+                        project.get_assigned_tasks()[task.get_id()] = task
+                    
+                    # Store project in projects dictionary
+                    self.projects[project.get_id()] = project
+                    
+            print("Projects loaded successfully from CSV.")
+        except FileNotFoundError:
+            print("No projects.csv file found.")
+        except Exception as e:
+            print(f"Error loading projects: {str(e)}")
+
+
+    def get_project_by_id(self, project_id):
+        try:
+            if project_id in self.projects:
+                return self.projects.get(project_id)
+        except:
+            print("Project not found")
+
+    def get_all_projects(self):
+        """
+        Returns a list of all projects in the system
+        
+        Returns:
+            List[Project]: List containing all project objects
+        """
+        return list(self.projects.values())
 
 # pm = ProjectManager.get_instance()
 # user1 = User(1, 'Bob', 'bob@gmail.com', 'pw123', 'staff')

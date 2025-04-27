@@ -1,8 +1,10 @@
 from datetime import datetime
 from task import Task
+from project import Project
 from manager import Manager
+from task_controller import TaskManager
+
 def show_manager_menu_task(manager: Manager):
-    from task_controller import TaskManager
     task_manager = TaskManager.get_instance()
 
     while True:
@@ -111,4 +113,136 @@ Welcome, {manager.get_username()}!
             print("Invalid option. Please try again.")
 
 def show_manager_menu_project(manager: Manager): #TODO: implement project menu
-    pass
+    from project_controller import ProjectManager
+    pm = ProjectManager.get_instance()
+    tm = TaskManager.get_instance()
+    while True:
+            print(f"""
+====== MANAGER DASHBOARD ======
+Welcome, {manager.get_username()}!
+
+1. Create Project
+2. Update Project Info
+3. Delete Project
+4. Add Task to Project
+5. Remove Task from Project
+6. View Project
+7. Display all Projects
+8. Return to Main Menu
+
+    """)
+            choice = input("Select an option: ")
+
+            if choice == '1':
+                try:
+                    id = input("Enter Project ID: ")
+                    project = Project(input("Enter Project Title: "),
+                                    input("Enter Project Description: "),
+                                    datetime(int(input("Enter due date: \nYear: ")), int(input("Month: ")), int(input("Day: "))),
+                                    manager.get_user_id())
+                    project.set_id(id)
+                    pm.create_project(project)
+                    pm._save_project_to_file()
+                    print("Project created successfully.")
+                except Exception as e:
+                    print(str(e))
+
+            elif choice == '2':
+                proj_id = input("Enter Project ID to update: ")
+                project = pm.get_project_by_id(proj_id)
+                if project:
+                    print("Current Project Info: ")
+                    print(f"Title: {project.get_title()}")
+                    print(f"Description: {project.get_description()}")
+                    print(f"Due Date: {project.get_due_date()}")
+                    
+                    pm.update_project(project)
+                else:
+                    print("Project not found")
+
+            elif choice == '3':
+                proj_id = input("Enter Project ID to deleted: ")
+                project = pm.get_project_by_id(proj_id)
+                if project:
+                    ans = input(f"Are you sure you want to delete project {proj_id}? [Y/N]: ").upper()
+                    if ans == 'Y':
+                        try:
+                            pm.delete_project(project)
+                        except Exception as e:
+                            print(str(e))
+                    else:
+                        print("Cancelled deleting task.")
+                        continue
+                else:
+                    print("Project not found")
+
+            elif choice == '4':
+                proj_id = input("Enter Project ID to add Tasks: ")
+                project = pm.get_project_by_id(proj_id)
+                if project:
+                    task_id = input("Enter Task ID: ")
+                    task = tm.get_task_by_id(task_id)
+                    if task:
+                        try:
+                            pm.add_task_to_project(project, task)
+                        except Exception as e:
+                            print(str(e))
+                    else:
+                        print("Task not found")
+
+            elif choice == '5':
+                proj_id = input("Enter Project ID to remove Tasks: ")
+                project = pm.get_project_by_id(proj_id)
+                if project:
+                    task_id = input("Enter Task ID to remove: ")
+                    task = tm.get_task_by_id(task_id)
+                    if task:
+                        try:
+                            pm.delete_task_from_project(project, task)
+                        except Exception as e:
+                            print(str(e))
+                    else:
+                        print("Task not found")
+
+            elif choice == '6':
+                project_id = input("Enter Project ID to view: ")
+                project = pm.get_project_by_id(project_id)
+                if project:
+                    print("\nProject Details:")
+                    print(f"ID: {project.get_id()}")
+                    print(f"Title: {project.get_title()}")
+                    print(f"Description: {project.get_description()}")
+                    print(f"Due Date: {project.get_due_date()}")
+                    print(f"\nTasks in Project:")
+                    tasks = project.get_assigned_tasks()
+                    if tasks:
+                        for task_id, task in tasks.items():
+                            print(f"\nTask ID: {task.get_id()}")
+                            print(f"Title: {task.get_title()}")
+                            print(f"Status: {task.get_status()}")
+                            print(f"Due Date: {task.get_due_date()}")
+                    else:
+                        print("No tasks assigned to this project.")
+                else:
+                    print("Project not found.")
+
+            elif choice == '7':
+                print("\nAll Projects:")
+                projects = pm.get_all_projects()
+                if projects:
+                    for project in projects:
+                        print(f"\nProject ID: {project.get_id()}")
+                        print(f"Title: {project.get_title()}")
+                        print(f"Description: {project.get_description()}")
+                        print(f"Due Date: {project.get_due_date()}")
+                        print("Tasks:", len(project.get_assigned_tasks()))
+                        print("-" * 30)
+                else:
+                    print("No projects found.")
+
+            elif choice == '8':
+                print("Returning to main menu...")
+                return False
+            
+            else:
+                print("Invalid option. Please try again.")

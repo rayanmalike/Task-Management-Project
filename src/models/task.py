@@ -110,7 +110,6 @@ class Task:
     def display_comments(self):
         if not self._comments:
             return "No comments yet."
-        
         comment_display = []
         for comment in self._comments:
             comment_display.append(
@@ -120,6 +119,6 @@ class Task:
         return "\n".join(comment_display)
     
     def __str__(self):
-        base_str = f"[{self._status.name}] {self._title} | Priority: {self._priority.name} | Due: {self._due_date} | Assigned to user ID: {self._assigned_user if self._assigned_user else 'Unassigned'}"
+        base_str = f"ID: {self._id} | Title: {self._title} | Status: [{self._status.name}]  | Priority: {self._priority.name} | Due: {self._due_date} | Assigned to user ID: {self._assigned_user if self._assigned_user else 'Unassigned'}"
         comments = self.display_comments()
         return f"{base_str}\nComments:\n{comments}"

@@ -33,10 +33,12 @@ def main():
                 clear_screen()
                 print(f"\nWelcome to our Dashboard,  {username} !!!\n")
                 role = manager.get_user_role(username)
-
+                # --------------------
                 if role == "boss":
                     show_boss_menu(username, manager)  # Show menu for BOSS if account logging in identied as "BOSS".
 
+
+                # --------------------
                 elif role == "manager":
                     user_controller = UserController.get_instance()
                     current_user = user_controller.get_manager_by_username(username)
@@ -54,7 +56,9 @@ Enter choice: """)
                         if choice == '1': 
                             if show_manager_menu_task(current_user) == False:
                                 continue  
-                        elif choice == '2' : show_manager_menu_project(current_user)
+                        elif choice == '2' : 
+                            if show_manager_menu_project(current_user) == False:
+                                continue
                         elif choice == '3':
                             print("Logging out...") 
                             break
@@ -68,6 +72,8 @@ Enter choice: """)
 3. Logout
 Enter choice: """)
                             return
+                        
+                # --------------------
                 elif role == "employee":
                     user_controller = UserController.get_instance()
                     current_user = user_controller.get_manager_by_username(username)
