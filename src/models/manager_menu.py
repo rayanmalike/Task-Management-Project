@@ -5,6 +5,23 @@ from manager import Manager
 from task_controller import TaskManager
 
 def show_manager_menu_task(manager: Manager):
+    """
+    Displays the Manager Task Dashboard Menu.
+
+    Allows manager to:
+    -Create tasks
+    -Update task info
+    -Delete a task
+    -Set priority for tasks
+    -Track task status
+    -Change assigned user for each task
+    -Add comments to tasks
+    -View each task
+    -Return to main menu
+
+    Args:
+        manager(Manager): The manager object currently logged in.
+    """
     task_manager = TaskManager.get_instance()
 
     while True:
@@ -112,6 +129,22 @@ Welcome, {manager.get_username()}!
             print("Invalid option. Please try again.")
 
 def show_manager_menu_project(manager: Manager): 
+    """
+    Displayes the Manager Project Dashboard Menu.
+
+    Allows manager to:
+    -Create projects
+    -Update project info
+    -Delete projects
+    -Add tasks to a project
+    -Remove tasks from projects
+    -View project details
+    -Display all projects
+    -Return to main menu
+
+    Args:
+        manager(Manager): The manager object currently logged in.
+    """
     from project_controller import ProjectManager
     pm = ProjectManager.get_instance()
     tm = TaskManager.get_instance()
