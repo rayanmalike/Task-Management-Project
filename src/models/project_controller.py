@@ -4,9 +4,17 @@ import csv
 from datetime import datetime
 
 class ProjectManager:
+    """
+    Singleton class is responsible for managing all projects and their tasks. 
+    This handles project creation, updating, deleting, loading from and saving to csv files.
+    """
     _instance = None
 
     def __init__(self):
+        """
+        Initializes the ProjectManager singleton instance.
+        Raises an exception if an instance already exists in the system.
+        """
         if ProjectManager._instance is not None:
             raise Exception("This class is a Singleton!")
         else:
@@ -16,16 +24,37 @@ class ProjectManager:
     
     @staticmethod
     def get_instance():
+        """
+        Retrieves the singleton instance of ProjectManager, creating it if necessary.
+
+        Returns:
+            ProjectManager: The singleton instance.
+        """
         if ProjectManager._instance is None:
             ProjectManager()
         return ProjectManager._instance
 
     def create_project(self, project : Project):
+        """
+        Creates a new project and saves it to file.
+
+        Args:
+            project(Project): The project to add. 
+        """
         self.projects[project.get_id()] = project
         self._save_project_to_file()
         print(f"Created project {project.get_id()} successfully.")
     
     def add_task_to_project(self, project: Project, task: Task) -> bool:
+        """
+        Adds a task to its respective project.
+
+        Args:
+            project(Project): The project to add the task to.
+            task(Task): The task to add.
+        Returns:
+            bool: True if successful, False otherwise. 
+        """
         if project and task:
             if project.get_id() in self.projects:
                 project.get_assigned_tasks()[task.get_id()] = task 
@@ -35,6 +64,15 @@ class ProjectManager:
         return False
 
     def delete_task_from_project(self, project: Project, task: Task) -> bool:
+        """
+        Removes a task from a specific project.
+
+        Args:
+            project(Project): The project from which to remove the task.
+            task(Task): The task to remove.
+        Returns:
+            bool: True if successful, False otherwise
+        """
         if project and task:
             if project.get_id() in self.projects:
                 if task.get_id() in project.get_assigned_tasks():
@@ -46,6 +84,13 @@ class ProjectManager:
             return False
 
     def update_project(self, project: Project):
+        """
+        Updates the details such as title, description, and due date of a project.
+        Prompts user for new info.
+
+        Args:
+            project(Project): The project to update.
+        """
             project.set_title(input("Enter new project title: "))
             project.set_description(input("Enter new description: "))
             project.set_due_date(datetime(int(input("Enter year: ")), int(input("Enter month: ")), int(input("Enter date: "))))
@@ -53,11 +98,20 @@ class ProjectManager:
             print(f"Updated project {project.get_id()} successfully.")
 
     def delete_project(self, project: Project):
+        """
+        Deletes a project from the system.
+
+        Args:
+            project(Project): The project to delete.
+        """
             del self.projects[project.get_id()]
             self._save_project_to_file()
             print(f"Deleted project {project.get_id()} successfully")
 
     def _save_project_to_file(self):
+        """
+        Saves all of the current projects and their tasks to a CSV file.
+        """
         try:
             with open("projects.csv", "w", newline="") as file:
                 writer = csv.writer(file)
@@ -95,6 +149,9 @@ class ProjectManager:
             print(f"Error saving projects to file: {str(e)}")
 
     def _load_projects_from_csv(self):
+        """
+        Loads the existing projects and their tasks from a CVS file.
+        """
         try:
             with open("projects.csv", "r", newline="") as file:
                 reader = csv.DictReader(file)
@@ -138,6 +195,15 @@ class ProjectManager:
 
 
     def get_project_by_id(self, project_id):
+        """
+        Retrieves a specifc project by its ID.
+
+        Args:
+            project_id(any): The ID of the project to retrieve.
+
+        Returns:
+            Project or None: The project if it's found, otherwise it returns None.
+        """
         try:
             if project_id in self.projects:
                 return self.projects.get(project_id)
