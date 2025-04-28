@@ -91,11 +91,11 @@ class ProjectManager:
         Args:
             project(Project): The project to update.
         """
-            project.set_title(input("Enter new project title: "))
-            project.set_description(input("Enter new description: "))
-            project.set_due_date(datetime(int(input("Enter year: ")), int(input("Enter month: ")), int(input("Enter date: "))))
-            self._save_project_to_file()
-            print(f"Updated project {project.get_id()} successfully.")
+        project.set_title(input("Enter new project title: "))
+        project.set_description(input("Enter new description: "))
+        project.set_due_date(datetime(int(input("Enter year: ")), int(input("Enter month: ")), int(input("Enter date: "))))
+        self._save_project_to_file()
+        print(f"Updated project {project.get_id()} successfully.")
 
     def delete_project(self, project: Project):
         """
@@ -104,9 +104,9 @@ class ProjectManager:
         Args:
             project(Project): The project to delete.
         """
-            del self.projects[project.get_id()]
-            self._save_project_to_file()
-            print(f"Deleted project {project.get_id()} successfully")
+        del self.projects[project.get_id()]
+        self._save_project_to_file()
+        print(f"Deleted project {project.get_id()} successfully")
 
     def _save_project_to_file(self):
         """
@@ -218,21 +218,4 @@ class ProjectManager:
             List[Project]: List containing all project objects
         """
         return list(self.projects.values())
-
-# pm = ProjectManager.get_instance()
-# user1 = User(1, 'Bob', 'bob@gmail.com', 'pw123', 'staff')
-# user2 = User(2, 'Alice', 'alice@gmail.com', 'pw456','manager')
-
-# task1 = Task('analyze data', 'create excel sheet', datetime(2025,4,5), user1, user2)
-# task2 = Task('analyze sheet', 'create chart', datetime(2025,4,5), user1, user2)
-# task3 = Task('lala', 'lili', datetime(2025, 6, 4), user1, user2)
-
-# project1 = Project('ProjA', 'big project', datetime(2025, 7, 8),user2)
-# pm.create_project(project1)
-# pm.add_task_to_project(project1, task3)
-# pm.add_task_to_project(project1, task1)
-# # pm.update_project(project1)
-# pm.delete_task_from_project(project1, task3)
-# pm.delete_project(project1)
-# pm._save_project_to_file()
 
