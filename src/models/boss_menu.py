@@ -1,5 +1,21 @@
 from user_controller import UserController
 def show_boss_menu(username, manager): # -> "username" parameter used to identify whether it's a boss, manager, or employee based on their "role".
+    """
+    Displays the Boss Dashboard menu which allows a boss to manage each user.
+
+    The boss can:
+    -View all users
+    -Add new user accounts
+    -Reset passwords
+    -Update user info
+    -Delete users
+    -Promote or demote users
+    -Log off
+
+    Args:
+        username(str): The username of the currently logged-in boss.
+        manager(object): The user management system instance that handles user actions like register, delete, or update.
+    """
     while True:
         print("""
 ====== BOSS DASHBOARD ======
