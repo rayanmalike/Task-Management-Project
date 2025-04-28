@@ -71,12 +71,18 @@ def show_boss_menu(username, manager): # -> "username" parameter used to identif
 
         elif choice == '6':
             username = input("Username to delete: ")
+            id = input("User ID to delete: ")
             confirm = input(f"Are you sure you want to delete '{username}'? (yes/no): ")
             if confirm.lower() == 'yes':
+                role = manager.get_user_role(username)
+                if role == 'manager':
+                    uc.delete_manager(id)
+                elif role == 'employee':
+                    uc.delete_employee(id)
                 manager.delete_user(username)
-                
+                print(f"User '{username}' and associated data deleted successfully.")
             else:
-                print("Cancelled.")
+                print("Delete operation cancelled.")
 
         elif choice == '7':
             username = input("Username to promote/demote: ")

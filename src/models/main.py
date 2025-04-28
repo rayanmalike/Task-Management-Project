@@ -3,6 +3,7 @@ from boss_menu import show_boss_menu
 from manager_menu import *
 from employee_menu import show_employee_menu
 from user_controller import UserController
+from employee import Employee
 
 def clear_screen():
     print("\n" * 10)  
@@ -76,11 +77,11 @@ Enter choice: """)
                 # --------------------
                 elif role == "employee":
                     user_controller = UserController.get_instance()
-                    current_user = user_controller.get_manager_by_username(username)
-                    if not current_user or current_user.get_role().lower() != "manager":
-                        print("Error: Invalid user or insufficient permissions")
+                    current_user = user_controller.get_employee_by_username(username)
+                    if not current_user or current_user.get_role().lower() != "employee":
+                        print("Error: Invalid user")
                         return
-                    show_employee_menu(username)  ##Show Employee's menu if account logging in identied as "Manager".
+                    show_employee_menu(current_user)  
                         
                 break
             else:

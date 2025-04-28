@@ -1,6 +1,3 @@
-import csv
-import os
-import hashlib
 
 class User:
     def __init__(self, user_id, username, email, password, role):

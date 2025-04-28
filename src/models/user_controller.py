@@ -94,10 +94,11 @@ class UserController:
             print(f"Failed to update manager info: {str(e)}")
             return False
         
-    def get_employee(self, employee_id: int) -> Optional[Employee]:
-        return self.employees.get(employee_id)
-    
-    def get_manager(self, manager_id: int) -> Optional[Manager]:
+    def get_employee(self, employee_id: int):
+        if employee_id in self.employees:
+            return self.employees.get(employee_id)
+            
+    def get_manager(self, manager_id: int) :
         return self.managers.get(manager_id)
     
     def get_manager_by_username(self, username):
@@ -120,32 +121,54 @@ class UserController:
     def get_all_managers(self) -> List[Manager]:
         return list(self.managers.values())
     
-    def _save_employees_to_csv(self):
-        with open("employees.csv", "w", newline="") as file:
-            writer = csv.writer(file)
-            writer.writerow(["ID", "Name", "Email", "Password", "Role"])
-            for employee in self.employees.values():
-                writer.writerow([
-                    employee.get_user_id(),
-                    employee.get_username(),
-                    employee.get_email(),
-                    employee.get_password(),
-                    employee.get_role()
-                ])
+    def delete_employee(self, employee_id: int) -> bool:
+        try:
+            if employee_id in self.employees:
+                del self.employees[employee_id]
+                self._save_employees_to_csv()
+                print(f"Successfully deleted employee (ID: {employee_id})")
+                return True
+            print(f"Employee with ID {employee_id} not found")
+            return False
+        except Exception as e:
+            print(f"Failed to delete employee: {str(e)}")
+            print(f"Current employees: {self.employees}")
+            return False
     
     def _save_managers_to_csv(self):
-        with open("managers.csv", "w", newline="") as file:
-            writer = csv.writer(file)
-            writer.writerow(["ID", "Name", "Email", "Password", "Role"])
-            for manager in self.managers.values():
-                writer.writerow([
-                    manager.get_user_id(),
-                    manager.get_username(),
-                    manager.get_email(),
-                    manager.get_password(),
-                    manager.get_role()
-                ])
-    
+        try:
+            with open("managers.csv", "w", newline="") as file:
+                writer = csv.writer(file)
+                writer.writerow(["ID", "Name", "Email", "Password", "Role"])
+                for manager in self.managers.values():
+                    writer.writerow([
+                        manager.get_user_id(),
+                        manager.get_username(),
+                        manager.get_email(),
+                        manager.get_password(),
+                        manager.get_role()
+                    ])
+                print("Successfully saved managers to CSV")
+        except Exception as e:
+            print(f"Error saving to CSV: {str(e)}")
+            
+    def _save_employees_to_csv(self):
+        try:
+            with open("employees.csv", "w", newline="") as file:
+                writer = csv.writer(file)
+                writer.writerow(["ID", "Name", "Email", "Password", "Role"])
+                for employee in self.employees.values():
+                    writer.writerow([
+                        employee.get_user_id(),
+                        employee.get_username(),
+                        employee.get_email(),
+                        employee.get_password(),
+                        employee.get_role()
+                    ])
+                print("Successfully saved employees to CSV")
+        except Exception as e:
+            print(f"Error saving to CSV: {str(e)}")
+
     def _load_from_csv(self):
         try:
             # Load employees
@@ -173,22 +196,36 @@ class UserController:
                         row["Password"],
                         row["Role"]
                     )
+            print("Loaded Managers and Employees csv files successfully.")
         except FileNotFoundError:
             print("One or both CSV files not found. Starting with empty collections.")
-
-# # Example usage:
-# uc = UserController.get_instance()
-
-# # Create some users
-# emp1 = uc.create_employee(1, "John Doe", "john@example.com", "pass123")
-# emp2 = uc.create_employee(2, "Jane Smith", "jane@example.com", "pass456")
-# mgr1 = uc.create_manager(3, "Alice Johnson", "alice@example.com", "pass789")
-
-# # Load existing users from CSV
-# uc._load_from_csv()
-
-# # Get all employees and managers
-# all_employees = uc.get_all_employees()
-# all_managers = uc.get_all_managers()
+        except Exception as e:
+            print(str(e))
 
 
+    def delete_manager(self, manager_id: int) -> bool:
+        try:
+            if manager_id in self.managers:
+                del self.managers[manager_id]
+                self._save_managers_to_csv()
+                print(f"Successfully deleted manager (ID: {manager_id})")
+                return True
+            print(f"Manager with ID {manager_id} not found")
+            return False
+        except Exception as e:
+            print(f"Failed to delete manager: {str(e)}")
+            print(f"Current managers: {self.managers}")
+            return False
+
+    def delete_employee(self, employee_id: int) -> bool:
+        try:
+            if employee_id in self.employees:
+                del self.employees[employee_id]
+                self._save_employees_to_csv()
+                print(f"Successfully deleted employee (ID: {employee_id})")
+                return True
+            print(f"Employee with ID {employee_id} not found")
+            return False
+        except Exception as e:
+            print(f"Failed to delete employee: {str(e)}")
+            return False

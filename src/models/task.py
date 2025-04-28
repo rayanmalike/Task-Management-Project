@@ -23,7 +23,7 @@ class Task:
         self._updated_at = datetime.now()
         self._assigned_user = assigned_user 
         self._creator = creator
-        self._comments = []
+        # self._comments = []
 
     # --- Getters ---
     def get_id(self):
@@ -58,9 +58,6 @@ class Task:
     
     def get_task(self, task_id):
         return self.tasks.get(task_id)
-
-    def get_comments(self):
-        return self._comments
     
     # --- Setters ---
     def set_id (self, task_id: int):
@@ -97,28 +94,26 @@ class Task:
     def set_creator(self, creator_id):
         self._creator = creator_id
         self._updated_at = datetime.now()
-
-    def add_comment(self, user, comment_text):
-        comment = {
-            'user': user,
-            'text': comment_text,
-            'timestamp': datetime.now()
-        }
-        self._comments.append(comment)
-        self._updated_at = datetime.now()
-
-    def display_comments(self):
-        if not self._comments:
-            return "No comments yet."
-        comment_display = []
-        for comment in self._comments:
-            comment_display.append(
-                f"[{comment['timestamp'].strftime('%Y-%m-%d %H:%M')}] "
-                f"{comment['user']}: {comment['text']}"
-            )
-        return "\n".join(comment_display)
-    
+        
     def __str__(self):
         base_str = f"ID: {self._id} | Title: {self._title} | Status: [{self._status.name}]  | Priority: {self._priority.name} | Due: {self._due_date} | Assigned to user ID: {self._assigned_user if self._assigned_user else 'Unassigned'}"
-        comments = self.display_comments()
-        return f"{base_str}\nComments:\n{comments}"
+        # comments = self.display_comments()
+        return base_str
+    
+class TaskComment:
+    def __init__(self, task_id: int, user_id: int, comment: str, timestamp: datetime):
+        self.task_id = task_id
+        self.user_id = user_id
+        self.comment = comment
+        self.timestamp = timestamp
+
+    def to_dict(self):
+        return {
+            "task_id": self.task_id,
+            "user_id": self.user_id,
+            "comment": self.comment,
+            "timestamp": self.timestamp.strftime("%Y-%m-%d %H:%M:%S")
+        }
+    
+    def __str__(self):
+        return f"[{self.timestamp.strftime('%Y-%m-%d %H:%M:%S')}] User {self.user_id}: {self.comment}"

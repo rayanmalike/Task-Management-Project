@@ -95,12 +95,11 @@ Welcome, {manager.get_username()}!
 
         elif choice == '7':
             task_id = input("Enter task ID to add comment: ")
-            try:
-                task = task_manager.get_task_by_id(task_id)
-                task_manager.view_task_comments(task)
-                task_manager.add_comment_to_task(task, manager, input("Enter comment for task: "))
-            except Exception as e:
-                print(str(e))
+            comment = input("Enter your comment: ")
+            if task_manager.add_comment(task_id, manager.get_user_id(), comment):
+                print("Comment added successfully")
+            else:
+                print("Failed to add comment")
 
         elif choice == '8':
             task_manager.list_tasks()
@@ -112,7 +111,7 @@ Welcome, {manager.get_username()}!
         else:
             print("Invalid option. Please try again.")
 
-def show_manager_menu_project(manager: Manager): #TODO: implement project menu
+def show_manager_menu_project(manager: Manager): 
     from project_controller import ProjectManager
     pm = ProjectManager.get_instance()
     tm = TaskManager.get_instance()
@@ -134,18 +133,14 @@ Welcome, {manager.get_username()}!
             choice = input("Select an option: ")
 
             if choice == '1':
-                try:
-                    id = input("Enter Project ID: ")
-                    project = Project(input("Enter Project Title: "),
-                                    input("Enter Project Description: "),
-                                    datetime(int(input("Enter due date: \nYear: ")), int(input("Month: ")), int(input("Day: "))),
-                                    manager.get_user_id())
-                    project.set_id(id)
-                    pm.create_project(project)
-                    pm._save_project_to_file()
-                    print("Project created successfully.")
-                except Exception as e:
-                    print(str(e))
+                id = input("Enter Project ID: ")
+                project = Project(input("Enter Project Title: "),
+                                input("Enter Project Description: "),
+                                datetime(int(input("Enter due date: \nYear: ")), int(input("Month: ")), int(input("Day: "))),
+                                manager.get_user_id())
+                project.set_id(id)
+                pm.create_project(project)
+                pm._save_project_to_file()
 
             elif choice == '2':
                 proj_id = input("Enter Project ID to update: ")

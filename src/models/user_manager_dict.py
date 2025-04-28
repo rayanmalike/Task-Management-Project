@@ -90,7 +90,7 @@ class UserManager:
         if self.users_dict:
             for index, (username, data) in enumerate(self.users_dict.items(), start=1):
                 print(
-                    f"User {index}: {username} --- Password: {data['password']}  ---  Role: {data['role']} --- Email: {data['email']} --- ID: {data['id']}")
+                    f"User {index}: {username} ---  Role: {data['role']} --- Email: {data['email']} --- ID: {data['id']}")
         else:
             print("No user information available.")
 
