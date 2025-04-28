@@ -3,6 +3,21 @@ from task_controller import TaskManager
 from project_controller import ProjectManager
 
 def show_employee_menu(employee):
+    """
+    Displays the Employee Dashboard Menu.
+
+    Allows employee to:
+    -View their assigned tasks
+    -Track status of a task
+    -Submit tasks as completed
+    -Add comments to tasks
+    -View all comments on their assigned tasks
+    -View details of a specific project
+    -Logout and return to the main menu
+
+    Args:
+        employee(Employee): The employee object currently logged in.
+    """
     task_manager = TaskManager.get_instance()
     project_manager = ProjectManager.get_instance()
 
