@@ -1,9 +1,8 @@
 from user_manager_dict import UserManager
 from boss_menu import show_boss_menu
-from manager_menu import show_manager_menu
+from manager_menu import *
 from employee_menu import show_employee_menu
-
-
+from user_controller import UserController
 def clear_screen():
     print("\n" * 10)  
 
@@ -33,16 +32,55 @@ def main():
                 clear_screen()
                 print(f"\nWelcome to our Dashboard,  {username} !!!\n")
                 role = manager.get_user_role(username)
-
+                # --------------------
                 if role == "boss":
                     show_boss_menu(username, manager)  # Show menu for BOSS if account logging in identied as "BOSS".
 
-                elif role == "manager":
-                    show_manager_menu(username)  # Show Manager's menu if account logging in identied as "Manager".
 
+                # --------------------
+                elif role == "manager":
+                    user_controller = UserController.get_instance()
+                    current_user = user_controller.get_manager_by_username(username)
+                    if not current_user or current_user.get_role().lower() != "manager":
+                        print("Error: Invalid user or insufficient permissions")
+                        return
+                    while True:
+                        choice = input(
+""" \n======= MAIN MENU FOR MANAGER ========
+
+1. Create/update/delete Tasks 
+2. Create/update/delete Projects 
+3. Logout
+Enter choice: """)
+                        if choice == '1': 
+                            if show_manager_menu_task(current_user) == False:
+                                continue  
+                        elif choice == '2' : 
+                            if show_manager_menu_project(current_user) == False:
+                                continue
+                        elif choice == '3':
+                            print("Logging out...") 
+                            break
+                        else: 
+                            print("Invalid option. Try again.")
+                            choice = input(
+""" \n======= MAIN MENU FOR MANAGER ========
+
+1. Create/update/delete Tasks 
+2. Create/update/delete Projects 
+3. Logout
+Enter choice: """)
+                            return
+                        
+                # --------------------
                 elif role == "employee":
-                    show_employee_menu(username)  ##Show Employee's menu if account logging in identied as "Manager".
-                break
+                    user_controller = UserController.get_instance()
+                    current_user = user_controller.get_employee_by_username(username)
+                    if not current_user or current_user.get_role().lower() != "employee":
+                        print("Error: Invalid user")
+                        return
+                    show_employee_menu(current_user)  
+                       
             else:
                 print("Invalid credentials.")
 
