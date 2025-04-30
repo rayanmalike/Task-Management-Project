@@ -3,8 +3,6 @@ from boss_menu import show_boss_menu
 from manager_menu import *
 from employee_menu import show_employee_menu
 from user_controller import UserController
-# from employee import Employee
-
 def clear_screen():
     print("\n" * 10)  
 
