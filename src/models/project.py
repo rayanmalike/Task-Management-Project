@@ -1,9 +1,9 @@
 from datetime import datetime
 
 class Project:
-    """"
+    """
     Represents a project containing tasks with attributes such as title, description, due date, and creator.
-    """"
+    """
     def __init__(self, title, description = '', due_date = None, creator_id = None):
         """
         Initializes a new Project instane.
