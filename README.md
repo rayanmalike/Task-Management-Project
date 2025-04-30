@@ -1,5 +1,4 @@
-# 343-Project
-# Group Project Management System
+# 343- Group Project: Task Management System
 
 A Python-based task management system designed for group projects with role-based access control and CSV data persistence.
 
