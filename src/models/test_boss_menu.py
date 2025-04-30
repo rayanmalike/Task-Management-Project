@@ -74,5 +74,5 @@ class TestBossMenuIntegration(unittest.TestCase):
         self.assertIn('updated_user', new_manager.users_dict)
         self.assertEqual(new_manager.users_dict['updated_user']['email'], 'updated@example.com')
 
-if __name__ == '__main__':
-    unittest.main()
+# if __name__ == '__main__':
+#     unittest.main()

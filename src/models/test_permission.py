@@ -53,5 +53,5 @@ class TestPermissions(unittest.TestCase):
         with self.assertRaises(PermissionError):
             permissions.enforce_view_project()
 
-if __name__ == "__main__":
-    unittest.main()
+# if __name__ == "__main__":
+#     unittest.main()

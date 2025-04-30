@@ -36,8 +36,8 @@ class TestEmployeeMenu(unittest.TestCase):
         self.task_manager.mark_task_as_completed(self.test_task)
         self.assertEqual(self.test_task.get_status(), "COMPLETED")
 
-if __name__ == '__main__':
-    unittest.main()
+# if __name__ == '__main__':
+#     unittest.main()
 
 # cd src / models
 # python -m unittest -v test_employee_menu

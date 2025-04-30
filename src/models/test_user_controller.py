@@ -108,5 +108,5 @@ class TestUserController(unittest.TestCase):
         mock_file.assert_called_with("managers.csv", "w", newline="")
         mock_writer.writerow.assert_called()
 
-if __name__ == "__main__":
-    unittest.main()
+# if __name__ == "__main__":
+#     unittest.main()

@@ -54,8 +54,8 @@ class TestTaskManager(unittest.TestCase):
         handle = mock_file()
         handle.write.assert_called()  # Ensure that write was called to save the comments
 
-if __name__ == "__main__":
-    unittest.main()
+# if __name__ == "__main__":
+#     unittest.main()
 
 # cd src -> models
 # python -m unittest -v  test_task_controller 

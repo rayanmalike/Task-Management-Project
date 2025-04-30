@@ -1,2 +1,4 @@
 ID,Name,Email,Password,Role
-
+3,Employee1,employee1@gmail.com,pw123,employee
+4,Employee2,employee2@gmail.com,pw456,employee
+5,Employee3,employee3@gmail.com,pw789,employee

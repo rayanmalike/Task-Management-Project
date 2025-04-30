@@ -41,8 +41,8 @@ class TestEmployee(unittest.TestCase):
         self.assertEqual(task.get_status(), "PENDING")  # Default status
         self.assertEqual(task.get_priority(), "UNDEFINED")  # Default priority
 
-if __name__ == "__main__":
-    unittest.main()
+# if __name__ == "__main__":
+#     unittest.main()
 
 # cd src/models
 # python -m unittest -v  test_employee.py

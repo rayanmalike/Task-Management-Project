@@ -76,8 +76,8 @@ class TestTaskComment(unittest.TestCase):
         expected_str = "[2025-04-30 14:30:00] User 999: Looks good!"
         self.assertEqual(str(comment), expected_str)
 
-if __name__ == '__main__':
-    unittest.main(verbosity=2)
+# if __name__ == '__main__':
+#     unittest.main(verbosity=2)
 
 # cd src/models
 # python -m unittest -v test_task

@@ -46,5 +46,5 @@ class TestUserManager(unittest.TestCase):
         self.assertTrue(self.manager.update_role("an123", "manager"))
         self.assertEqual(self.manager.get_user_role("an123"), "manager")
 
-if __name__ == '__main__':
-    unittest.main()
+# if __name__ == '__main__':
+#     unittest.main()
