@@ -82,8 +82,7 @@ Enter choice: """)
                         print("Error: Invalid user")
                         return
                     show_employee_menu(current_user)  
-                        
-                break
+                       
             else:
                 print("Invalid credentials.")
 
