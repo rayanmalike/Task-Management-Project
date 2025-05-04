@@ -49,7 +49,8 @@ class UserManager:
                                 "id": user_id
                             }
         except FileNotFoundError:
-            print("File does not exist.")
+            # print("File does not exist.")
+            pass
 
     def _write_all_users_to_file(self):
         """
