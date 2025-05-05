@@ -50,6 +50,11 @@ class TestUserManager(unittest.TestCase):
     def test_delete_nonexistent_user(self):
         self.assertFalse(self.manager.delete_user("No_one"))
 
+    def tearDown(self):
+        if os.path.exists(self.test_csv):
+            os.remove(self.test_csv)
+
+
 # if __name__ == '__main__':
 #     unittest.main()
 
