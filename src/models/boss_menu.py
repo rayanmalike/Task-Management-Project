@@ -9,7 +9,6 @@ def show_boss_menu(username, manager): # -> "username" parameter used to identif
     -Reset passwords
     -Update user info
     -Delete users
-    -Promote or demote users
     -Log off
 
     Args:
@@ -25,8 +24,7 @@ def show_boss_menu(username, manager): # -> "username" parameter used to identif
 4. Reset Password for Employee
 5. Update User Info
 6. Delete User
-7. Promote/Demote Role
-8. Logout
+7. Logout
 """)
         uc = UserController.get_instance() # Create the User Controller object
         choice = input("Select an option: ")
@@ -101,11 +99,6 @@ def show_boss_menu(username, manager): # -> "username" parameter used to identif
                 print("Delete operation cancelled.")
 
         elif choice == '7':
-            username = input("Username to promote/demote: ")
-            new_role = input("New role (boss/manager/employee): ")
-            manager.update_role(username, new_role)
-
-        elif choice == '8':
             print("Logging out...")
             break
 

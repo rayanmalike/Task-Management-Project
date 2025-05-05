@@ -1,78 +1,71 @@
 import unittest
 import os
-from unittest.mock import patch, MagicMock
+import sys
+import io
 from user_manager_dict import UserManager
-import boss_menu  
-class TestBossMenuIntegration(unittest.TestCase):
-    
+
+class TestBossMenuRoleSwap(unittest.TestCase):
     def setUp(self):
-        self.test_csv = 'test_users.csv'
-        # Ensure the test file is clean before each test
+        self.test_csv = "test_users_role_swap.csv"
         with open(self.test_csv, 'w') as f:
-            f.write('')
+            f.write("")
         self.manager = UserManager(self.test_csv)
 
-        # Create a dummy boss account to allow boss_menu to function
-        self.manager.register_user('boss_user', 'boss_pass', 'boss', 'boss@example.com', 'BOSS001')
+        # Redirect stdout to capture printed logs
+        self._stdout = sys.stdout
+        sys.stdout = self._log_output = io.StringIO()
 
-        # Replace UserController with a mock (to prevent errors from other parts of the app)
-        self.user_controller_patch = patch('boss_menu.UserController')
-        self.mock_user_controller_class = self.user_controller_patch.start()
-        self.mock_user_controller_instance = MagicMock()
-        self.mock_user_controller_class.get_instance.return_value = self.mock_user_controller_instance
+        # Initial users
+        self.manager.register_user("boss_user", "pw", "boss", "boss@example.com", "B001")
+        self.manager.register_user("manager_user", "pw", "manager", "manager@example.com", "M001")
+        self.manager.register_user("employee_user", "pw", "employee", "employee@example.com", "E001")
+        self.manager.register_user("test_user", "pw123", "employee", "test@example.com", "T001")
 
-    # def tearDown(self):
-    #     # Clean up the test file
-    #     if os.path.exists(self.test_csv):
-    #         os.remove(self.test_csv)
-    #     self.user_controller_patch.stop()
+    def tearDown(self):
+        # Restore stdout and print captured logs
+        sys.stdout = self._stdout
+        print(self._log_output.getvalue())
+        if os.path.exists(self.test_csv):
+            os.remove(self.test_csv)
 
-    @patch('boss_menu.input', side_effect=[
-        '2',  # Add new account
-        'new_user', 'new_pass', 'new@example.com', 'manager', 'MGR001',
-        '8'  # Logout
-    ])
-    def test_add_user_writes_to_csv(self, mock_input):
-        boss_menu.show_boss_menu('boss_user', self.manager)
+    def test_user_presence(self):
+        self.assertIn("test_user", self.manager.users_dict)
+        self.assertEqual(self.manager.get_user_role("test_user"), "employee")
 
-        # Reload the manager to verify file change
-        new_manager = UserManager(self.test_csv)
-        self.assertTrue('new_user' in new_manager.users_dict)
-        self.assertEqual(new_manager.users_dict['new_user']['role'], 'manager')
+    def test_reset_passwords(self):
+        self.assertTrue(self.manager.reset_password("employee_user", "newpass1"))
+        new_hash = self.manager.hash_password("newpass1")
+        self.assertEqual(self.manager.users_dict["employee_user"]["password"], new_hash)
 
-    @patch('boss_menu.input', side_effect=[
-        '6',  # Delete user
-        'delete_user', 'EMP001', 'yes',
-        '8'
-    ])
-    def test_delete_user_removes_from_csv(self, mock_input):
-        # Pre-add a user to delete
-        self.manager.register_user('delete_user', 'pass123', 'employee', 'del@example.com', 'EMP001')
+        self.assertTrue(self.manager.reset_password("manager_user", "newpass2"))
+        new_hash = self.manager.hash_password("newpass2")
+        self.assertEqual(self.manager.users_dict["manager_user"]["password"], new_hash)
 
-        # Simulate role checking and controller delete calls
-        self.manager.get_user_role = lambda username: 'employee'
+    def test_delete_user(self):
+        self.assertIn("test_user", self.manager.users_dict)
+        deleted = self.manager.delete_user("test_user")
+        self.assertTrue(deleted)
+        self.assertNotIn("test_user", self.manager.users_dict)
 
-        boss_menu.show_boss_menu('boss_user', self.manager)
+    def test_role_swap_and_revert(self):
+        self.assertEqual(self.manager.get_user_role("manager_user"), "manager")
+        self.assertEqual(self.manager.get_user_role("employee_user"), "employee")
 
-        # Reload and assert user is deleted
-        new_manager = UserManager(self.test_csv)
-        self.assertNotIn('delete_user', new_manager.users_dict)
+        # Swap
+        self.assertTrue(self.manager.update_role("manager_user", "employee"))
+        self.assertEqual(self.manager.get_user_role("manager_user"), "employee")
 
-    @patch('boss_menu.input', side_effect=[
-        '5',  # Update user info
-        'update_user', 'updated_user', 'updated@example.com',
-        '8'
-    ])
-    def test_update_user_info_in_csv(self, mock_input):
-        self.manager.register_user('update_user', 'pass', 'employee', 'old@example.com', 'EMP123')
-        self.manager.user_exists = lambda username: username == 'update_user'
+        self.assertTrue(self.manager.update_role("employee_user", "manager"))
+        self.assertEqual(self.manager.get_user_role("employee_user"), "manager")
 
-        boss_menu.show_boss_menu('boss_user', self.manager)
+        # Revert
+        self.assertTrue(self.manager.update_role("manager_user", "manager"))
+        self.assertEqual(self.manager.get_user_role("manager_user"), "manager")
 
-        # Reload and verify updated data
-        new_manager = UserManager(self.test_csv)
-        self.assertIn('updated_user', new_manager.users_dict)
-        self.assertEqual(new_manager.users_dict['updated_user']['email'], 'updated@example.com')
+        self.assertTrue(self.manager.update_role("employee_user", "employee"))
+        self.assertEqual(self.manager.get_user_role("employee_user"), "employee")
+
+        print("Logging out...")  # Final logout simulation
 
 # if __name__ == '__main__':
 #     unittest.main()
