@@ -110,3 +110,6 @@ class TestUserController(unittest.TestCase):
 
 # if __name__ == "__main__":
 #     unittest.main()
+
+# cd src/models
+#python -m unittest -v test_user_controller
