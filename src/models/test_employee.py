@@ -33,8 +33,10 @@ class TestEmployee(unittest.TestCase):
         # Get the assigned tasks
         tasks = employee.get_assigned_tasks()
         
+        # Use the string key since Task_ID from CSV is a string
+        task = tasks["1"]
+        
         # Ensure the task is loaded correctly
-        task = tasks[1]  # Now using integer task ID
         self.assertEqual(task.get_title(), "Test Task")
         self.assertEqual(task.get_description(), "This is a test task")
         self.assertEqual(task.get_due_date(), datetime(2025, 5, 1, 12, 0, 0))
@@ -43,6 +45,7 @@ class TestEmployee(unittest.TestCase):
 
 # if __name__ == "__main__":
 #     unittest.main()
+
 
 # cd src/models
 # python -m unittest -v  test_employee.py

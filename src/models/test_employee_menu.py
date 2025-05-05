@@ -39,5 +39,5 @@ class TestEmployeeMenu(unittest.TestCase):
 # if __name__ == '__main__':
 #     unittest.main()
 
-# cd src / models
+# cd src/models
 # python -m unittest -v test_employee_menu
