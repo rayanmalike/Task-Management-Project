@@ -82,9 +82,6 @@ Welcome, {employee.get_username()}!
                     for comment in comments:
                         print(f"[{comment.timestamp}] User {comment.user_id}: {comment.comment}")
                     print("-" * 50)
-                # else:
-                #     print("No comments to display for this task.")
-                # print("-" * 50)
 
 
         elif choice == '6':

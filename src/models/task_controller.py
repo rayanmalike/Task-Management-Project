@@ -229,8 +229,8 @@ class TaskManager:
                     if task_id not in self.task_comments:
                         self.task_comments[task_id] = []
                     comment = TaskComment(
-                        task_id=int(task_id),
-                        user_id=int(user_id),
+                        task_id=task_id,
+                        user_id=user_id,
                         comment=comment_text,
                         timestamp=datetime.strptime(row["Timestamp"], "%Y-%m-%d %H:%M:%S")
                     )
