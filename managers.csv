@@ -1,2 +1,3 @@
 ID,Name,Email,Password,Role
 2,Manager1,manager1@gmail.com,pw1,manager
+6,Manager2,Manager2@gmail.com,pw3,manager

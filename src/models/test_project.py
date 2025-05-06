@@ -34,7 +34,7 @@ class TestProject(unittest.TestCase):
         self.assertIn(expected_substring, str(self.project))
 
 # if __name__ == '__main__':
-#     unittest.main()
+#      unittest.main()
 
 # cd src/models
 # python -m unittest -v test_project

@@ -23,7 +23,7 @@ def show_employee_menu(employee):
 
     while True:
         print(f"""
-====== Employee DASHBOARD ======
+------> Employee DASHBOARD <------
 Welcome, {employee.get_username()}!
 
 1. View My Tasks
@@ -68,15 +68,24 @@ Welcome, {employee.get_username()}!
         
         elif choice == '5':
             print("\n=== Task Comments ===")
-            tasks = employee.get_assigned_tasks()
+            tasks = task_manager.get_user_assigned_tasks(employee.get_user_id()) 
             if not tasks:
                 print("No tasks assigned.")
                 continue
 
-            print("\nDisplaying comments for all tasks:")
-            for task_id, task in tasks.items():
-                task_manager.get_task_comments(task_id)
-                print("-" * 50)
+            print("\nDisplaying comments for your tasks:")
+            for task in tasks:
+                task_id = task.get_id()
+                comments = task_manager.get_task_comments(task_id)  
+                if comments:
+                    print (f"Task {task_id}")
+                    for comment in comments:
+                        print(f"[{comment.timestamp}] User {comment.user_id}: {comment.comment}")
+                    print("-" * 50)
+                # else:
+                #     print("No comments to display for this task.")
+                # print("-" * 50)
+
 
         elif choice == '6':
             project_id = input("Enter Project ID to view: ")

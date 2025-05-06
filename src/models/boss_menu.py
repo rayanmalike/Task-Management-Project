@@ -7,8 +7,8 @@ def show_boss_menu(username, manager): # -> "username" parameter used to identif
     -View all users
     -Add new user accounts
     -Reset passwords
-    -Update user info
     -Delete users
+    -Promote or demote users
     -Log off
 
     Args:
@@ -17,12 +17,12 @@ def show_boss_menu(username, manager): # -> "username" parameter used to identif
     """
     while True:
         print("""
-====== BOSS DASHBOARD ======
+------> BOSS DASHBOARD <------
 1. Display all users
 2. Add new Account
 3. Reset Password for Manager
 4. Reset Password for Employee
-5. Update User Info
+5. Promote/Demote Role
 6. Delete User
 7. Logout
 """)
@@ -63,25 +63,11 @@ def show_boss_menu(username, manager): # -> "username" parameter used to identif
             new_password = input("New password: ")
             manager.reset_password(username, new_password)
             uc.update_password(id, new_password, False)
-        
-        elif choice == '5': 
-            print("\n=== Update User Information ===")
-            username = input("Enter username to update: ")
-            if manager.user_exists(username):
-                new_username = input("Enter new username (or press Enter to skip): ")
-                new_email = input("Enter new email (or press Enter to skip): ")
-                
-                # Only pass values that were actually entered
-                if new_username or new_email:
-                    manager.update_user_info(
-                        username,
-                        new_email if new_email else None,
-                        new_username if new_username else None
-                    )
-                else:
-                    print("No changes made.")
-            else:
-                print(f"User '{username}' not found.")
+
+        elif choice == '5':
+            username = input("Username to promote/demote: ")
+            new_role = input("New role (boss/manager/employee): ")
+            manager.update_role(username, new_role)
 
         elif choice == '6':
             username = input("Username to delete: ")
@@ -97,6 +83,7 @@ def show_boss_menu(username, manager): # -> "username" parameter used to identif
                 print(f"User '{username}' and associated data deleted successfully.")
             else:
                 print("Delete operation cancelled.")
+
 
         elif choice == '7':
             print("Logging out...")

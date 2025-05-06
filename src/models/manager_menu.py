@@ -26,7 +26,7 @@ def show_manager_menu_task(manager: Manager):
 
     while True:
         print(f"""
-====== MANAGER DASHBOARD ======
+------> MANAGER DASHBOARD <------
 Welcome, {manager.get_username()}!
 
 1. Create Task

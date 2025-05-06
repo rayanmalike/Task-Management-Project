@@ -127,6 +127,7 @@ class TaskManager:
             user_id (str): ID of the user.
             task (Task): Task object to assign.
         """
+        user_id = str(user_id)
         if user_id not in self.user_tasks:
             self.user_tasks[user_id] = []
         self.user_tasks[user_id].append(task)
@@ -139,6 +140,7 @@ class TaskManager:
             user_id (str): ID of the user.
             task (Task): Task object to unassign.
         """
+        user_id = str(user_id)
         if user_id in self.user_tasks:
             if task in self.user_tasks[user_id]:
                 self.user_tasks[user_id].remove(task)
@@ -204,6 +206,8 @@ class TaskManager:
                     task.set_assigned_user(row['Assigned_User_ID'])
                     task.set_creator(row['Creator_ID'])
                     self.tasks[row['Task_ID']] = task
+                    self._assign_task_to_user(row["Assigned_User_ID"], task)
+
         except FileNotFoundError:
             print("No tasks.csv file found.")
         except Exception as e:
@@ -218,25 +222,25 @@ class TaskManager:
             with open("task_comments.csv", "r") as file:
                 reader = csv.DictReader(file)
                 for row in reader:
-                    task_id = int(row["TaskID"])
+                    task_id = row["TaskID"]
+                    user_id = row["UserID"]
+                    comment_text = row["Comment"]
+                    # print(f"Loaded comment for Task {task_id}, User {user_id}: {comment_text}")  # Debugging print
                     if task_id not in self.task_comments:
                         self.task_comments[task_id] = []
                     comment = TaskComment(
-                        task_id=task_id,
-                        user_id=int(row["UserID"]),
-                        comment=row["Comment"],
+                        task_id=int(task_id),
+                        user_id=int(user_id),
+                        comment=comment_text,
                         timestamp=datetime.strptime(row["Timestamp"], "%Y-%m-%d %H:%M:%S")
                     )
                     self.task_comments[task_id].append(comment)
 
-                if self.task_comments:
-                    [print(comment) for comment in self.task_comments[task_id]]
-                else:
-                    print("No comments to display")
-                return True
+            return True
         except FileNotFoundError:
             print("Comments CSV file not found. Starting with empty comments.")
             return False
+
 
     def _save_comments_to_csv(self):
         """
@@ -268,25 +272,30 @@ class TaskManager:
         Returns:
             list: List of assigned Task objects.
         """
-        if user_id in self.user_tasks:
-            return self.user_tasks.get(user_id)
+        user_id = str(user_id)
+        return self.user_tasks.get(user_id)
 
     def get_task_comments(self, task_id):
         """
-        Retrieves all comments associated with a specific task.
+        Retrieves comments associated with a specific task.
+        If user_id is provided, only comments made by that user are returned.
 
         Args:
             task_id (str): Task ID.
+            user_id (int, optional): User ID to filter comments.
 
         Returns:
-            list: List of TaskComment objects for the task.
+            list: List of TaskComment objects.
         """
         try:
             self._load_comments_from_csv()
-            return self.task_comments.get(task_id, [])
+            task_id =str(task_id)
+            return self.task_comments.get(task_id, [])  
+      
         except Exception as e:
             print(f"Error retrieving comments for task {task_id}: {str(e)}")
             return []
+
 
     def add_comment(self, task_id, user_id, comment: str) -> bool:
         """
