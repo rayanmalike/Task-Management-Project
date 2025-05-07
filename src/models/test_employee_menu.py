@@ -37,9 +37,14 @@ class TestEmployeeMenu(unittest.TestCase):
     def test_track_task_status(self, mock_input):
         task = MagicMock()
         task.get_status.return_value = 'IN_PROGRESS'
+        task.get_assigned_user.return_value = '3'  # Ensure the task is assigned to employee '3'
         self.task_manager.get_task_by_id.return_value = task
 
         show_employee_menu(self.employee)
+
+        print(f"Called get_task_by_id: {self.task_manager.get_task_by_id.called}")  # Debugging line
+        print(f"Called get_status: {task.get_status.called}")  # Debugging line
+
         self.task_manager.get_task_by_id.assert_called_with('123')
         task.get_status.assert_called_once()
 
