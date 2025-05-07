@@ -44,7 +44,11 @@ Welcome, {employee.get_username()}!
             try:
                 task = task_manager.get_task_by_id(task_id)
                 if task:
-                    print(f"Current status for task [{task_id}]: {task.get_status()}")
+                    # Check if the task is assigned to the employee
+                    if task.get_assigned_user() == employee.get_user_id():
+                        print(f"Current status for task [{task_id}]: {task.get_status()}")
+                    else:
+                        print("You are not assigned to this task.")
                 else:
                     print("Task not found")
             except Exception as e:
