@@ -84,5 +84,5 @@ class TestTaskManager(unittest.TestCase):
         self.assertEqual(result, [task])
 
 
-if __name__ == "__main__":
-    unittest.main()
+# if __name__ == "__main__":
+#     unittest.main()
