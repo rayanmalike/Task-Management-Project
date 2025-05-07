@@ -33,8 +33,5 @@ class TestProject(unittest.TestCase):
         expected_substring = "Project 12: Test Title | Due: 2025-11-12 00:00:00 | Tasks: No tasks added yet."
         self.assertIn(expected_substring, str(self.project))
 
-# if __name__ == '__main__':
-#      unittest.main()
-
-# cd src/models
-# python -m unittest -v test_project
+if __name__ == '__main__':
+     unittest.main()

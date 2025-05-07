@@ -55,5 +55,5 @@ class TestUserManager(unittest.TestCase):
             os.remove(self.test_csv)
 
 
-# if __name__ == '__main__':
-#     unittest.main()
+if __name__ == '__main__':
+    unittest.main()

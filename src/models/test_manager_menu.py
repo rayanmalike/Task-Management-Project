@@ -61,8 +61,5 @@ class TestManagerMenu(unittest.TestCase):
         self.mock_task.view()
         self.mock_task.view.assert_called_once()  # Ensure view method was called
 
-# if __name__ == '__main__':
-#     unittest.main()
-
-# cd src/models
-# python -m unittest -v test_manager_menu
+if __name__ == '__main__':
+    unittest.main()
