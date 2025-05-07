@@ -1,4 +1,4 @@
 Task_ID,Title,Description,Due_Date,Priority,Status,Assigned_User_ID,Creator_ID
-1,create report for sales,none,2025-05-05T00:00:00,MEDIUM,PENDING,3,2
+1,create report for sales,none,2025-05-05T00:00:00,MEDIUM,COMPLETED,3,2
 2,create charts for report,none,2025-05-06T00:00:00,LOW,PENDING,3,2
 3,set up meeting,none,2025-05-07T00:00:00,HIGH,PENDING,4,2
