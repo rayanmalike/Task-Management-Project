@@ -49,7 +49,7 @@ class UserManager:
                                 "id": user_id
                             }
         except FileNotFoundError:
-            # print("File does not exist.")
+           # print("File does not exist.")
             pass
 
     def _write_all_users_to_file(self):
@@ -80,7 +80,7 @@ class UserManager:
             "id": user_id
         }
         self._write_all_users_to_file()
-        print(f"User '{username}' with role '{role}' saved to file.")
+        print(f"-> User '{username}' with role '{role}' saved to file.")
 
     def user_exists(self, username: str) -> bool:
         """
@@ -146,7 +146,7 @@ class UserManager:
             print(f"-> User with ID '{user_id}' has been deleted successfully!")
             return True
         else:
-            print(f"User with ID '{user_id}' not found. Unable to delete!")
+            print(f"-> User with ID '{user_id}' not found. Unable to delete!")
             return False
 
     def get_user_role(self, username: str) -> str:
@@ -174,13 +174,13 @@ class UserManager:
             bool: True if reset successful, False otherwise.
         """
         if not self.user_exists(username):
-            print(f"Username '{username}' not found. Password reset failed.")
+            print(f"U-> sername '{username}' not found. Password reset failed.")
             return False
 
         new_hashed = self.hash_password(new_password)
         self.users_dict[username]["password"] = new_hashed
         self._write_all_users_to_file()
-        print(f"Password for '{username}' has been reset successfully.")
+        print(f"-> Password for '{username}' has been reset successfully.")
         return True
 
     def display_users(self):
@@ -189,10 +189,10 @@ class UserManager:
         """
         if self.users_dict:
             for index, (username, data) in enumerate(self.users_dict.items(), start=1):
-                print(
-                    f"User {index}: {username} ---  Role: {data['role']} --- Email: {data['email']} --- ID: {data['id']}")
+                print(f"User {index}: --- Username: {username} --- Role: {data['role']} --- Email: {data['email']} --- ID: {data['id']} --- Password: {data['password']}")
+
         else:
-            print("No user information available.")
+            print("-> No user information available.")
 
     def update_role(self, username: str, new_role: str) -> bool:
         """
@@ -206,16 +206,16 @@ class UserManager:
             bool: True if update successful, False otherwise.
         """
         if username not in self.users_dict:
-            print(f"User '{username}' not found.")
+            print(f"-> User '{username}' not found.")
             return False
 
         if new_role not in ['boss', 'manager', 'employee']:
-            print("Invalid role. Role must be 'boss', 'manager', or 'employee'.")
+            print("-> Invalid role. Role must be 'boss', 'manager', or 'employee'.")
             return False
 
         self.users_dict[username]['role'] = new_role
         self._write_all_users_to_file()
-        print(f"User '{username}' role updated to '{new_role}'.")
+        print(f"-> User '{username}' role updated to '{new_role}'.")
         return True
 
     def update_user_info(self, username: str, new_email: str = None, new_username: str = None) -> bool:
@@ -231,7 +231,7 @@ class UserManager:
             bool: True if update successful, False otherwise.
         """
         if username not in self.users_dict:
-            print(f"User '{username}' not found.")
+            print(f"-> User '{username}' not found.")
             return False
 
         user_data = self.users_dict[username]
@@ -241,11 +241,14 @@ class UserManager:
 
         if new_username and new_username != username:
             if new_username in self.users_dict:
-                print(f"Username '{new_username}' already exists.")
+                print(f"-> Username '{new_username}' already exists.")
                 return False
             self.users_dict[new_username] = user_data
             del self.users_dict[username]
 
         self._write_all_users_to_file()
-        print(f"User information updated successfully.")
+        print(f"-> User information updated successfully.")
         return True
+
+    def get_user_by_username(self, username):
+        return self.users_dict.get(username)
